@@ -1,94 +1,76 @@
-# 10x Astro Starter
+# Aura (MVP)
 
-A modern, opinionated starter template for building fast, accessible, and AI-friendly web applications.
+## Project Description
+
+Aura (MVP) is a responsive web application designed to help users efficiently manage their personal budgets. The application focuses on manual tracking of incomes, expenses, and transfers across multiple financial accounts. Users can categorize expenses, plan budgets on a monthly or yearly basis, and benefit from an intuitive overview of their financial health through dashboards and analytics.
 
 ## Tech Stack
 
-- [Astro](https://astro.build/) v5.5.5 - Modern web framework for building fast, content-focused websites
-- [React](https://react.dev/) v19.0.0 - UI library for building interactive components
-- [TypeScript](https://www.typescriptlang.org/) v5 - Type-safe JavaScript
-- [Tailwind CSS](https://tailwindcss.com/) v4.0.17 - Utility-first CSS framework
+- **Frontend:** Astro 5, React 19, TypeScript 5, Tailwind CSS 4, Shadcn/ui
+- **Backend:** Supabase (PostgreSQL, Authentication, Backend-as-a-Service)
+- **Tools:** ESLint, Prettier, GitHub Actions for CI/CD, DigitalOcean for hosting
 
-## Prerequisites
+## Getting Started Locally
 
-- Node.js v22.14.0 (as specified in `.nvmrc`)
-- npm (comes with Node.js)
+1. **Prerequisites:**
+   - Ensure you have [Node.js](https://nodejs.org/) installed (refer to the version specified in the `.nvmrc` file).
 
-## Getting Started
+2. **Clone the repository:**
+   ```bash
+   git clone https://github.com/grzesieksocha/10x-aura
+   cd 10x-aura
+   ```
 
-1. Clone the repository:
+3. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-```bash
-git clone https://github.com/przeprogramowani/10x-astro-starter.git
-cd 10x-astro-starter
-```
-
-2. Install dependencies:
-
-```bash
-npm install
-```
-
-3. Run the development server:
-
-```bash
-npm run dev
-```
-
-4. Build for production:
-
-```bash
-npm run build
-```
+4. **Run the development server:**
+   ```bash
+   npm run dev
+   ```
+   Open [http://localhost:3000](http://localhost:3000) in your browser to see the application in action.
 
 ## Available Scripts
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run lint` - Run ESLint
-- `npm run lint:fix` - Fix ESLint issues
+- `npm run dev` - Starts the development server.
+- `npm run build` - Builds the project for production.
+- `npm run preview` - Previews the production build locally.
+- `npm run lint` - Runs ESLint to analyze the code for issues.
+- `npm run lint:fix` - Automatically fixes linting issues where possible.
+- `npm run format` - Formats the code using Prettier.
 
-## Project Structure
+## Project Scope
 
-```md
-.
-├── src/
-│   ├── layouts/    # Astro layouts
-│   ├── pages/      # Astro pages
-│   │   └── api/    # API endpoints
-│   ├── components/ # UI components (Astro & React)
-│   └── assets/     # Static assets
-├── public/         # Public assets
-```
+Aura (MVP) includes the following core features:
 
-## AI Development Support
+- **Account Management:**
+  - Add, view, and delete multiple financial accounts with initial balances.
+  - Automatic balance calculation based on initial balance and associated transaction history.
 
-This project is configured with AI development tools to enhance the development experience, providing guidelines for:
+- **Transaction Management:**
+  - Record incomes, expenses, and transfers (with appropriate paired entries for transfers).
+  - Assign categories to transactions to track spending and budget adherence.
 
-- Project structure
-- Coding practices
-- Frontend development
-- Styling with Tailwind
-- Accessibility best practices
-- Astro and React guidelines
+- **Budgeting:**
+  - Plan monthly or yearly budgets by manually entering expected incomes and expenses.
+  - Visual comparison of planned versus actual spending using color indicators.
 
-### Cursor IDE
+- **Analytics and Dashboard:**
+  - Overview of total balance across all accounts.
+  - Detailed transaction history for individual accounts.
+  - Graphical representations (e.g., pie charts) of expense distribution by category.
 
-The project includes AI rules in `.cursor/rules/` directory that help Cursor IDE understand the project structure and provide better code suggestions.
+- **User Authentication:**
+  - Secure registration and login functionality using email and password.
 
-### GitHub Copilot
+This MVP focuses on manual data entry and provides a streamlined experience without the complexity of automatic bank integrations.
 
-AI instructions for GitHub Copilot are available in `.github/copilot-instructions.md`
+## Project Status
 
-### Windsurf
-
-The `.windsurfrules` file contains AI configuration for Windsurf.
-
-## Contributing
-
-Please follow the AI guidelines and coding practices defined in the AI configuration files when contributing to this project.
+This project is currently in the MVP phase and is under active development. Contributions, bug reports, and feature suggestions are welcome.
 
 ## License
 
-MIT
+This project is licensed under the MIT License. 
