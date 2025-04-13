@@ -31,8 +31,8 @@ Zarządzanie budżetem domowym jest trudne, ponieważ wymaga regularnego śledze
 *   Lista transakcji dla konta jest sortowana chronologicznie wg daty transakcji (od najnowszej do najstarszej lub odwrotnie - do ustalenia w UI/UX).
 
 ### 3.3 Zarządzanie Kategoriami
-*   System udostępnia predefiniowane kategorie wydatków: Jedzenie, Mieszkanie, Transport, Rozrywka.
-*   Użytkownik może dodawać własne kategorie wydatków bez limitu ich liczby.
+*   System udostępnia predefiniowane kategorie z możliwością określenia typu (wydatkowa lub przychodowa). Domyślne kategorie wydatkowe: Jedzenie, Mieszkanie, Transport, Rozrywka. Domyślne kategorie przychodowe: Praca, Dodatkowe zlecenia, Odsetki.
+*   Użytkownik może dodawać własne kategorie z możliwością wyboru typu (wydatkowa lub przychodowa), bez limitu ich liczby.
 *   Użytkownik może edytować nazwy własnych kategorii.
 *   Użytkownik może usuwać własne kategorie.
 *   System blokuje możliwość usunięcia kategorii (predefiniowanej lub własnej), jeśli istnieją jakiekolwiek transakcje przypisane do tej kategorii.
@@ -43,7 +43,7 @@ Zarządzanie budżetem domowym jest trudne, ponieważ wymaga regularnego śledze
 *   Tabela prezentuje miesiące (kolumny) i kategorie wydatków (wiersze) dla wybranego roku.
 *   Użytkownik może przełączać widok pomiędzy różnymi latami.
 *   Użytkownik może manualnie wprowadzić planowaną kwotę wydatków dla każdej kategorii w każdym miesiącu.
-*   Tabela zawiera dodatkowy wiersz informacyjny dla przychodów (Planowane / Rzeczywiste / Różnica). Użytkownik może manualnie wprowadzić planowaną kwotę przychodów dla każdego miesiąca.
+*   Tabela zawiera oddzielne sekcje: jedną dla kategorii wydatkowych oraz jedną dla kategorii przychodowych. Użytkownik może manualnie wprowadzić planowaną kwotę dla każdej kategorii, umożliwiając oddzielne planowanie wydatków i przychodów.
 *   W komórkach tabeli (na przecięciu miesiąca i kategorii) system wyświetla:
     *   Planowaną kwotę wydatków (wprowadzoną przez użytkownika).
     *   Rzeczywistą sumę wydatków (obliczoną na podstawie transakcji z danej kategorii i miesiąca - uwzględniając transakcje z przyszłymi datami w ramach danego miesiąca).
@@ -338,7 +338,7 @@ Następujące funkcjonalności i cechy są celowo wyłączone z zakresu MVP:
     *   Then: Widzę tabelę budżetową.
     *   And: Domyślnie wyświetlany jest bieżący rok.
     *   And: Mogę wybrać inny rok (np. za pomocą przełącznika/listy rozwijanej).
-    *   And: Wiersze tabeli reprezentują wszystkie moje kategorie wydatków (predefiniowane i własne) oraz dodatkowy wiersz dla przychodów.
+    *   And: Wiersze tabeli reprezentują wszystkie moje kategorie według ich typu. Kategorie wydatkowe pojawiają się w sekcji wydatków, a kategorie przychodowe w dedykowanej sekcji przychodów, umożliwiając indywidualne planowanie (np. Praca, Dodatkowe zlecenia, Odsetki).
     *   And: Kolumny tabeli reprezentują miesiące wybranego roku.
     *   And: Komórki na przecięciu kategorii i miesiąca są gotowe do wpisania planowanych kwot.
 
