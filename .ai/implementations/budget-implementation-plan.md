@@ -30,16 +30,16 @@ Zestaw endpointów do zarządzania budżetami miesięcznymi dla kategorii wydatk
   }
   ```
 
-### PUT /api/budgets/{budgetId}
+### PATCH /api/budgets/{budgetId}
 
-- Metoda HTTP: PUT
+- Metoda HTTP: PATCH
 - Struktura URL: `/api/budgets/{budgetId}`
 - Parametry Path:
   - `budgetId` (number)
 - Request Body:
-  ```typescript
+  ```json
   {
-    planned_amount: number;
+    "planned_amount": number
   }
   ```
 
@@ -116,7 +116,7 @@ const budgetListParamsSchema = z.object({
 5. Wywołanie BudgetService.createBudget(userId, command)
 6. Zwrócenie utworzonego rekordu
 
-### PUT /api/budgets/{budgetId}
+### PATCH /api/budgets/{budgetId}
 
 1. Walidacja request body przez updateBudgetSchema
 2. Pobranie ID użytkownika z kontekstu Supabase
@@ -161,7 +161,7 @@ const budgetListParamsSchema = z.object({
 interface ApiError {
   code: string;
   message: string;
-  details?: Record<string, string[]>;
+  details?: Record<string, unknown>;
 }
 ```
 
@@ -190,13 +190,13 @@ interface ApiError {
      pages/
        api/
          budgets/
-           index.ts        # GET, POST handlers
-           [budgetId].ts   # PUT handler
+           index.ts        # GET (list), POST handlers
+           [id].ts        # GET (single), PATCH handlers
      lib/
        services/
          budget.service.ts
-       schemas/
-         budget.schema.ts
+       validators/
+         budget.validator.ts
        types/
          budget.types.ts
    ```
@@ -216,7 +216,7 @@ interface ApiError {
 
    - GET /api/budgets
    - POST /api/budgets
-   - PUT /api/budgets/{budgetId}
+   - PATCH /api/budgets/{budgetId}
 
 5. Implementacja testów:
 

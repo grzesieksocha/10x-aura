@@ -7,7 +7,7 @@ Celem endpointu jest zarządzanie kontami użytkowników. Umożliwia on pełen z
 - Pobieranie listy kont (GET /api/accounts)
 - Pobieranie szczegółów konkretnego konta (GET /api/accounts/{accountId})
 - Tworzenie nowego konta (POST /api/accounts)
-- Aktualizację danych konta (PUT /api/accounts/{accountId})
+- Aktualizację danych konta (PATCH /api/accounts/{accountId})
 - Usuwanie konta wraz z powiązanymi operacjami (DELETE /api/accounts/{accountId})
 
 Endpoint korzysta z Supabase do obsługi operacji bazy danych, Zod do walidacji danych wejściowych oraz mechanizmów Astro do obsługi żądań. Implementacja musi być zgodna z regułami backend.mdc, shared.mdc i astro.mdc.
@@ -15,7 +15,7 @@ Endpoint korzysta z Supabase do obsługi operacji bazy danych, Zod do walidacji 
 ## 2. Szczegóły żądania
 
 - **Metody HTTP**:
-  - GET, POST, PUT, DELETE
+  - GET, POST, PATCH, DELETE
 - **Struktura URL**:
   - Lista kont: `/api/accounts`
   - Szczegóły konta: `/api/accounts/{accountId}`
@@ -29,7 +29,7 @@ Endpoint korzysta z Supabase do obsługi operacji bazy danych, Zod do walidacji 
     - Request Body (JSON):
       - `name` (string, wymagany)
       - `initial_balance` (number, wymagany)
-  - **PUT /api/accounts/{accountId}**:
+  - **PATCH /api/accounts/{accountId}**:
     - Request Body (JSON):
       - `name` (string, wymagany)
   - **DELETE /api/accounts/{accountId}**:
@@ -56,7 +56,7 @@ Endpoint korzysta z Supabase do obsługi operacji bazy danych, Zod do walidacji 
   - Status: 201 Created
   - Response: Utworzony obiekt `AccountResponseDTO`
   - Błędy: 400 Bad Request dla nieprawidłowych danych, 401 Unauthorized, 500 Internal Server Error
-- **PUT /api/accounts/{accountId}**:
+- **PATCH /api/accounts/{accountId}**:
   - Status: 200 OK
   - Response: Zaktualizowany obiekt `AccountResponseDTO`
   - Błędy: 400, 401, 404
@@ -72,7 +72,7 @@ Endpoint korzysta z Supabase do obsługi operacji bazy danych, Zod do walidacji 
 3. Handler API waliduje dane wejściowe przy użyciu Zod schema.
 4. Po walidacji żądanie jest przekazywane do warstwy serwisowej (np. `AccountService` w `src/lib/services`), która wykonuje logikę biznesową:
    - Dla POST: tworzy nowy rekord w tabeli `accounts`
-   - Dla PUT: aktualizuje dane konta
+   - Dla PATCH: aktualizuje dane konta
    - Dla GET: pobiera dane z tabeli `accounts` oraz oblicza `current_balance` (na podstawie `initial_balance` oraz agregacji transakcji)
    - Dla DELETE: usuwa konto wraz z powiązanymi rekordami (transakcjami)
 5. Komunikacja z bazą odbywa się za pośrednictwem Supabase (używając `context.locals.supabase`).
@@ -114,3 +114,19 @@ Endpoint korzysta z Supabase do obsługi operacji bazy danych, Zod do walidacji 
    - Dodanie mechanizmów obsługi błędów i logowania, aby zwracać właściwe kody statusu oraz komunikaty.
 6. **Przegląd kodu i dokumentacja**:
    - Upewnienie się, że kod jest zgodny z zasadami implementacji (backend.mdc, shared.mdc, astro.mdc) i przez code review.
+7. **Przygotowanie struktury**:
+   ```
+   src/
+     pages/
+       api/
+         accounts/
+           index.ts        # GET (list), POST handlers
+           [id].ts        # GET (single), PATCH, DELETE handlers
+     lib/
+       services/
+         account.service.ts
+       validators/
+         account.validator.ts
+       types/
+         account.types.ts
+   ```

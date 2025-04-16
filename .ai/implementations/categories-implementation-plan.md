@@ -21,6 +21,7 @@ Endpoint korzysta z Supabase do obsługi operacji bazy danych, Zod do walidacji 
 - **Parametry**:
   - **GET /api/categories**:
     - Wymagane: Token uwierzytelniający (JWT w nagłówku `Authorization`)
+    - Opcjonalne: Parametry zapytania `page`, `limit` (paginacja) oraz ewentualne opcje sortowania
   - **POST /api/categories**:
     - Request Body (JSON):
       ```typescript
@@ -144,12 +145,10 @@ const updateCategorySchema = z.object({
 Każdy błąd powinien zwracać odpowiedź w formacie:
 
 ```typescript
-{
-  error: {
-    message: string;
-    code: string;
-    details?: any;
-  }
+interface ApiError {
+  code: string;
+  message: string;
+  details?: Record<string, unknown>;
 }
 ```
 

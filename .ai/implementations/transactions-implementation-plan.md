@@ -2,9 +2,37 @@
 
 ## 1. Przegląd punktu końcowego
 
-Endpoint służy do tworzenia transakcji transferowych między dwoma kontami użytkownika. Automatycznie tworzy dwa powiązane rekordy transakcji - jeden dla konta źródłowego (debet) i jeden dla konta docelowego (kredyt). Zapewnia atomowość operacji i spójność danych.
+Endpoint służy do zarządzania transakcjami użytkownika. Umożliwia:
+
+- Pobieranie listy transakcji (GET /api/transactions)
+- Pobieranie szczegółów transakcji (GET /api/transactions/{transactionId})
+- Tworzenie transferu między kontami (POST /api/transactions/transfer)
+- Tworzenie transakcji wydatku/przychodu (POST /api/transactions)
 
 ## 2. Szczegóły żądania
+
+### GET /api/transactions
+
+- Metoda HTTP: GET
+- Struktura URL: `/api/transactions`
+- Headers:
+  - `Authorization: Bearer <token>` (wymagany)
+- Query Parameters:
+  - `page` (opcjonalny): numer strony
+  - `limit` (opcjonalny): liczba wyników na stronę
+  - `account_id` (opcjonalny): filtrowanie po koncie
+  - `type` (opcjonalny): filtrowanie po typie (expense, revenue, transfer)
+  - `start_date` (opcjonalny): data początkowa (ISO8601)
+  - `end_date` (opcjonalny): data końcowa (ISO8601)
+
+### GET /api/transactions/{transactionId}
+
+- Metoda HTTP: GET
+- Struktura URL: `/api/transactions/{transactionId}`
+- Headers:
+  - `Authorization: Bearer <token>` (wymagany)
+
+### POST /api/transactions/transfer
 
 - Metoda HTTP: POST
 - Struktura URL: `/api/transactions/transfer`
@@ -181,14 +209,16 @@ interface ApiError {
      pages/
        api/
          transactions/
-           transfer.ts     # Endpoint handler
+           index.ts         # GET (list), POST handlers
+           [id].ts         # GET (single) handler
+           transfer.ts     # POST /transfer handler
      lib/
        services/
-         transaction.ts   # Business logic
+         transaction.service.ts
        validators/
-         transaction.ts   # Zod schemas
+         transaction.validator.ts
        types/
-         transaction.ts   # TypeScript types
+         transaction.types.ts
    ```
 
 2. Implementacja walidatorów:
