@@ -166,7 +166,22 @@ export interface Database {
       };
     };
     Views: Record<never, never>;
-    Functions: Record<never, never>;
+    Functions: {
+      create_transfer: {
+        Args: {
+          p_user_id: string;
+          p_source_account_id: number;
+          p_destination_account_id: number;
+          p_amount: number;
+          p_transaction_date: string;
+          p_description: string | null;
+        };
+        Returns: {
+          source_transaction: Database["public"]["Tables"]["transactions"]["Row"];
+          destination_transaction: Database["public"]["Tables"]["transactions"]["Row"];
+        };
+      };
+    };
     Enums: {
       transaction_type_enum: "expense" | "revenue" | "transfer";
     };
