@@ -23,7 +23,6 @@ export const GET: APIRoute = async ({ params, locals }) => {
 
     return new Response(JSON.stringify(category), {
       status: 200,
-      headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
     return handleApiError(error);
@@ -53,7 +52,6 @@ export const PUT: APIRoute = async ({ request, params, locals }) => {
 
     return new Response(JSON.stringify(category), {
       status: 200,
-      headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
     return handleApiError(error);
@@ -76,7 +74,6 @@ export const DELETE: APIRoute = async ({ params, locals }) => {
 
     return new Response(JSON.stringify({ message: "Category deleted successfully" }), {
       status: 200,
-      headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
     return handleApiError(error);

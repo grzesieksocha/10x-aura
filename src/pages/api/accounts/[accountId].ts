@@ -1,30 +1,28 @@
 import type { APIRoute } from "astro";
 import { AccountService } from "../../../lib/services/account.service";
+import { TransactionService } from "../../../lib/services/transaction.service";
 import { handleApiError } from "../../../lib/api/errors";
 import { updateAccountSchema } from "../../../lib/schemas/account.schema";
-import { ApiError } from "../../../lib/api/errors";
 import { DEFAULT_USER_ID } from "../../../db/supabase.client";
 
 export const prerender = false;
 
-export const GET: APIRoute = async ({ params, locals }) => {
+export const GET: APIRoute = async ({ locals, params }) => {
   try {
-    const accountId = parseInt(params.accountId ?? "", 10);
+    const accountId = Number(params.accountId);
     if (isNaN(accountId)) {
-      throw new ApiError(400, "Invalid account ID", "INVALID_PARAMETER");
+      return new Response(JSON.stringify({ error: "Invalid account ID" }), { status: 400 });
     }
 
-    const accountService = new AccountService(locals.supabase);
+    const transactionService = new TransactionService(locals.supabase);
+    const accountService = new AccountService(locals.supabase, transactionService);
     const account = await accountService.getAccountById(DEFAULT_USER_ID, accountId);
 
     if (!account) {
-      throw new ApiError(404, "Account not found", "NOT_FOUND");
+      return new Response(JSON.stringify({ error: "Account not found" }), { status: 404 });
     }
 
-    return new Response(JSON.stringify(account), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
+    return new Response(JSON.stringify(account));
   } catch (error) {
     return handleApiError(error);
   }
@@ -32,52 +30,48 @@ export const GET: APIRoute = async ({ params, locals }) => {
 
 export const PUT: APIRoute = async ({ request, params, locals }) => {
   try {
-    const accountId = parseInt(params.accountId ?? "", 10);
+    const accountId = Number(params.accountId);
     if (isNaN(accountId)) {
-      throw new ApiError(400, "Invalid account ID", "INVALID_PARAMETER");
+      return new Response(JSON.stringify({ error: "Invalid account ID" }), { status: 400 });
     }
 
     const json = await request.json();
     const result = updateAccountSchema.safeParse(json);
 
     if (!result.success) {
-      throw new ApiError(400, "Invalid request data", "VALIDATION_ERROR");
+      return new Response(JSON.stringify({ error: result.error }), { status: 400 });
     }
 
-    const accountService = new AccountService(locals.supabase);
+    const transactionService = new TransactionService(locals.supabase);
+    const accountService = new AccountService(locals.supabase, transactionService);
     const account = await accountService.updateAccount(DEFAULT_USER_ID, accountId, result.data);
 
     if (!account) {
-      throw new ApiError(404, "Account not found", "NOT_FOUND");
+      return new Response(JSON.stringify({ error: "Account not found" }), { status: 404 });
     }
 
-    return new Response(JSON.stringify(account), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
+    return new Response(JSON.stringify(account));
   } catch (error) {
     return handleApiError(error);
   }
 };
 
-export const DELETE: APIRoute = async ({ params, locals }) => {
+export const DELETE: APIRoute = async ({ locals, params }) => {
   try {
-    const accountId = parseInt(params.accountId ?? "", 10);
+    const accountId = Number(params.accountId);
     if (isNaN(accountId)) {
-      throw new ApiError(400, "Invalid account ID", "INVALID_PARAMETER");
+      return new Response(JSON.stringify({ error: "Invalid account ID" }), { status: 400 });
     }
 
-    const accountService = new AccountService(locals.supabase);
+    const transactionService = new TransactionService(locals.supabase);
+    const accountService = new AccountService(locals.supabase, transactionService);
     const success = await accountService.deleteAccount(DEFAULT_USER_ID, accountId);
 
     if (!success) {
-      throw new ApiError(404, "Account not found", "NOT_FOUND");
+      return new Response(JSON.stringify({ error: "Account not found" }), { status: 404 });
     }
 
-    return new Response(JSON.stringify({ message: "Account deleted successfully" }), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
+    return new Response(null, { status: 204 });
   } catch (error) {
     return handleApiError(error);
   }

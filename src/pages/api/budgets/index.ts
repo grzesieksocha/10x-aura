@@ -34,7 +34,6 @@ export const GET: APIRoute = async ({ url, locals }) => {
 
     return new Response(JSON.stringify(budgets), {
       status: 200,
-      headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
     return handleApiError(error);
@@ -55,7 +54,6 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
     return new Response(JSON.stringify(budget), {
       status: 201,
-      headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
     return handleApiError(error);

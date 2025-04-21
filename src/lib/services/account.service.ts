@@ -1,8 +1,12 @@
 import type { AccountResponseDTO, CreateAccountCommand, UpdateAccountCommand } from "../schemas/account.schema";
 import type { SupabaseClientType } from "../../db/supabase.client";
+import { TransactionService } from "./transaction.service";
 
 export class AccountService {
-  constructor(private readonly supabase: SupabaseClientType) {}
+  constructor(
+    private readonly supabase: SupabaseClientType,
+    private readonly transactionService: TransactionService
+  ) {}
 
   async createAccount(userId: string, command: CreateAccountCommand): Promise<AccountResponseDTO> {
     const { data: account, error } = await this.supabase
@@ -19,9 +23,21 @@ export class AccountService {
       throw new Error(`Failed to create account: ${error.message}`);
     }
 
+    // Create initial credit transaction if initial balance is greater than 0
+    if (command.initial_balance > 0) {
+      await this.transactionService.createTransfer({
+        user_id: userId,
+        source_account_id: account.id,
+        destination_account_id: null,
+        amount: command.initial_balance,
+        transaction_date: new Date().toISOString(),
+        description: "Initial balance",
+      });
+    }
+
     return {
       ...account,
-      current_balance: account.initial_balance, // For new accounts, current = initial
+      current_balance: account.initial_balance,
     };
   }
 

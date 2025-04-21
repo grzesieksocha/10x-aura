@@ -14,7 +14,6 @@ export const GET: APIRoute = async ({ locals }) => {
 
     return new Response(JSON.stringify(categories), {
       status: 200,
-      headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
     return handleApiError(error);
@@ -41,7 +40,6 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
     return new Response(JSON.stringify(category), {
       status: 201,
-      headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
     return handleApiError(error);

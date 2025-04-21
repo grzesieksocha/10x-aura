@@ -30,7 +30,6 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
     return new Response(JSON.stringify(transfer), {
       status: 201,
-      headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
     return handleApiError(error);
