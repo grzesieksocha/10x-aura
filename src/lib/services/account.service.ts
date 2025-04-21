@@ -50,7 +50,8 @@ export class AccountService {
         transactions (amount, transaction_type)
       `
       )
-      .eq("user_id", userId);
+      .eq("user_id", userId)
+      .order("id");
 
     if (error) {
       throw new Error(`Failed to fetch accounts: ${error.message}`);
