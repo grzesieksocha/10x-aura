@@ -16,6 +16,7 @@ export default function AccountsView() {
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [editingAccount, setEditingAccount] = useState<Account | null>(null);
+  const [isDeletingAccount, setIsDeletingAccount] = useState<number | null>(null);
   const [formData, setFormData] = useState({
     name: "",
     initial_balance: 0,
@@ -66,6 +67,31 @@ export default function AccountsView() {
       name: "",
       initial_balance: 0,
     });
+  };
+
+  const handleDelete = async (accountId: number) => {
+    if (!confirm("Are you sure you want to delete this account? This action cannot be undone.")) {
+      return;
+    }
+
+    setIsDeletingAccount(accountId);
+    try {
+      const response = await fetch(`/api/accounts/${accountId}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete account");
+      }
+
+      setAccounts((prev) => prev.filter((acc) => acc.id !== accountId));
+      toast.success("Account deleted successfully");
+    } catch (error) {
+      console.error("Failed to delete account:", error);
+      toast.error("Failed to delete account");
+    } finally {
+      setIsDeletingAccount(null);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -205,6 +231,32 @@ export default function AccountsView() {
                     <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
                     <path d="m15 5 4 4" />
                   </svg>
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="absolute right-14 top-4 h-8 w-8"
+                  onClick={() => handleDelete(account.id)}
+                  disabled={isDeletingAccount === account.id}
+                >
+                  {isDeletingAccount === account.id ? (
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current"></div>
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="h-4 w-4"
+                    >
+                      <path d="M3 6h18" />
+                      <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                      <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                    </svg>
+                  )}
                 </Button>
                 <a href={`/account/${account.id}`} className="block hover:opacity-80">
                   <CardTitle>{account.name}</CardTitle>
