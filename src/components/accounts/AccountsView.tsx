@@ -258,7 +258,7 @@ export default function AccountsView() {
                     </svg>
                   )}
                 </Button>
-                <a href={`/account/${account.id}`} className="block hover:opacity-80">
+                <a href={`/accounts/${account.id}`} className="block hover:opacity-80">
                   <CardTitle>{account.name}</CardTitle>
                   <CardDescription>Account Balance</CardDescription>
                 </a>

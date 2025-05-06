@@ -6,7 +6,7 @@ Widok szczegółów konta prezentuje operacje finansowe na danym koncie, umożli
 
 ## 2. Routing widoku
 
-- Ścieżka: `/account/[id]`
+- Ścieżka: `/accounts/[id]`
 - Parametry URL: `id` - identyfikator konta
 
 ## 3. Struktura komponentów

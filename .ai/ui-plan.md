@@ -32,7 +32,7 @@ Całościowa struktura interfejsu użytkownika opiera się na podzieleniu aplika
 
 - **Widok konta (Account Details)**
 
-  - Ścieżka: `/account/{id}`
+  - Ścieżka: `/accounts/{id}`
   - Główny cel: Prezentacja operacji finansowych na danym koncie (wydatki, przychody, transfery) oraz możliwość dodawania i edytowania transakcji.
   - Kluczowe informacje: Stan konta, lista transakcji sortowana chronologicznie, filtry (miesiąc, kategoria), oznaczenia typów transakcji (np. +/-, kolorowe etykiety).
   - Kluczowe komponenty: Stan konta, lista transakcji, filtry (dropdown, date picker), formularz dodawania transakcji, mechanizm edycji inline.
@@ -58,7 +58,7 @@ Całościowa struktura interfejsu użytkownika opiera się na podzieleniu aplika
 1. Użytkownik trafia na stronę logowania (`/login`) i wprowadza swoje dane uwierzytelniające.
 2. Po poprawnej autentykacji zostaje przekierowany na stronę pulpitu (`/dashboard`), gdzie widzi podsumowanie stanu finansów.
 3. Na pasku nawigacyjnym użytkownik wybiera sekcję „Konta” (`/accounts`), aby zarządzać swoimi kontami – dodaje nowe, edytuje istniejące lub usuwa niepotrzebne.
-4. Następnie użytkownik przechodzi do widoku wybranego konta (`/account/{id}`), gdzie przegląda historię operacji, stosuje filtry (miesiąc, kategoria) oraz dodaje nowe transakcje (wydatki, przychody, transfery).
+4. Następnie użytkownik przechodzi do widoku wybranego konta (`/accounts/{id}`), gdzie przegląda historię operacji, stosuje filtry (miesiąc, kategoria) oraz dodaje nowe transakcje (wydatki, przychody, transfery).
 5. W przypadku transferu formularz transakcji dynamicznie dopasowuje pola, ukrywając wybór kategorii i wyświetlając dodatkowe pole dla konta docelowego.
 6. Użytkownik może odwiedzić widok „Budżet” (`/budget`), aby wprowadzić lub edytować planowane wydatki i przychody w interaktywnej tabeli.
 7. W widoku „Ustawienia” (`/settings`) użytkownik może dokonać zmian w danych konta, zmienić hasło oraz zarządzać kategoriami, korzystając z formularzy oraz modalnych potwierdzeń.
