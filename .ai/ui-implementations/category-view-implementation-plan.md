@@ -133,7 +133,6 @@ interface CategoryViewModel {
   id: number;
   name: string;
   is_revenue: boolean;
-  is_system: boolean; // Określa czy kategoria jest predefiniowana
   created_at: string;
 }
 

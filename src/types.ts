@@ -9,14 +9,36 @@ declare module "astro" {
   }
 }
 
-/** Konto z API */
 export type DashboardAccount = AccountResponseDTO;
 
-/** Sumaryczne saldo obliczane w hooku */
 export type TotalBalance = number;
 
-/** Podział wydatków wg kategorii */
 export interface CategoryBreakdownDTO {
   category: string;
   total: number;
+}
+
+export interface CategoryResponseDTO {
+  id: number;
+  user_id: string;
+  name: string;
+  is_revenue: boolean;
+  created_at: string;
+}
+
+export interface CategoryViewModel {
+  id: number;
+  name: string;
+  is_revenue: boolean;
+  created_at: string;
+}
+
+export interface CategoryFormData {
+  name: string;
+  is_revenue: boolean;
+}
+
+export interface CategoryFilter {
+  type: "all" | "expense" | "revenue";
+  search?: string;
 }
