@@ -1,10 +1,8 @@
 ---
-import Navigation from "@/components/Navigation.astro";
 import Layout from "@/layouts/Layout.astro";
 import { AccountDetailsView } from "@/components/account/AccountDetailsView";
 ---
 
 <Layout title="Account Details">
-  <Navigation />
   <AccountDetailsView client:load accountId={Number(Astro.params.id)} />
 </Layout>
