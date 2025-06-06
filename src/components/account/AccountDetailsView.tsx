@@ -9,8 +9,19 @@ interface AccountDetailsViewProps {
 }
 
 export function AccountDetailsView({ accountId }: AccountDetailsViewProps) {
-  const { account, isLoading: isAccountLoading } = useAccountDetails(accountId);
-  const { transactions, isLoading: isTransactionsLoading, filters, setFilters } = useTransactions(accountId);
+  const { account, isLoading: isAccountLoading, refresh: refreshAccount } = useAccountDetails(accountId);
+  const {
+    transactions,
+    isLoading: isTransactionsLoading,
+    filters,
+    setFilters,
+    refresh: refreshTransactions,
+  } = useTransactions(accountId);
+
+  const handleTransactionAdded = () => {
+    refreshAccount();
+    refreshTransactions();
+  };
 
   if (isAccountLoading) {
     return <div>Loading account details...</div>;
@@ -22,7 +33,7 @@ export function AccountDetailsView({ accountId }: AccountDetailsViewProps) {
 
   return (
     <div className="container mx-auto py-6 space-y-6">
-      <AccountHeader account={account} />
+      <AccountHeader account={account} onTransactionAdded={handleTransactionAdded} />
       <TransactionFilters filters={filters} onFilterChange={setFilters} />
       <TransactionList transactions={transactions} isLoading={isTransactionsLoading} />
     </div>

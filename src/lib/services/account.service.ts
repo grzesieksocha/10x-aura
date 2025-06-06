@@ -60,9 +60,7 @@ export class AccountService {
     return accounts.map((account) => {
       const transactions = account.transactions || [];
       const balance = transactions.reduce((sum, tx) => {
-        if (tx.transaction_type === "expense") return sum - tx.amount;
-        if (tx.transaction_type === "revenue") return sum + tx.amount;
-        return sum;
+        return sum + tx.amount / 100;
       }, account.initial_balance);
 
       const accountDto: AccountResponseDTO = {
@@ -92,15 +90,13 @@ export class AccountService {
       .single();
 
     if (error) {
-      if (error.code === "PGRST116") return null; // Not found
+      if (error.code === "PGRST116") return null;
       throw new Error(`Failed to fetch account: ${error.message}`);
     }
 
     const transactions = account.transactions || [];
     const balance = transactions.reduce((sum, tx) => {
-      if (tx.transaction_type === "expense") return sum - tx.amount;
-      if (tx.transaction_type === "revenue") return sum + tx.amount;
-      return sum;
+      return sum + tx.amount / 100;
     }, account.initial_balance);
 
     return {
@@ -132,15 +128,13 @@ export class AccountService {
       .single();
 
     if (error) {
-      if (error.code === "PGRST116") return null; // Not found
+      if (error.code === "PGRST116") return null;
       throw new Error(`Failed to update account: ${error.message}`);
     }
 
     const transactions = account.transactions || [];
     const balance = transactions.reduce((sum, tx) => {
-      if (tx.transaction_type === "expense") return sum - tx.amount;
-      if (tx.transaction_type === "revenue") return sum + tx.amount;
-      return sum;
+      return sum + tx.amount / 100;
     }, account.initial_balance);
 
     return {

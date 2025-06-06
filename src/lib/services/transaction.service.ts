@@ -18,11 +18,17 @@ export interface TransactionFilters {
 export class TransactionService {
   constructor(private readonly supabase: SupabaseClientType) {}
 
+  private dollarsToCents(amount: number): number {
+    return Math.round(amount * 100);
+  }
+
+  private centsToDollars(amount: number): number {
+    return amount / 100;
+  }
+
   async createTransaction(userId: string, data: Omit<TransactionInsert, "user_id">) {
-    // Validate account ownership
     await this.validateAccountOwnership(userId, data.account_id);
 
-    // If category is provided, validate it belongs to the user
     if (data.category_id) {
       const { data: category } = await this.supabase
         .from("categories")
@@ -36,10 +42,18 @@ export class TransactionService {
       }
     }
 
-    return this.createSingleTransaction({
+    const storageData = {
       ...data,
+      amount: this.dollarsToCents(data.amount),
       user_id: userId,
-    });
+    };
+
+    const transaction = await this.createSingleTransaction(storageData);
+
+    return {
+      ...transaction,
+      amount: this.centsToDollars(transaction.amount),
+    };
   }
 
   async listTransactions(userId: string, filters: TransactionFilters = {}) {
@@ -80,7 +94,23 @@ export class TransactionService {
       throw new ApiError(500, `Failed to fetch transactions: ${error.message}`);
     }
 
-    return transactions;
+    return (
+      transactions?.map((transaction: any) => {
+        const result = {
+          ...transaction,
+          amount: this.centsToDollars(transaction.amount),
+        };
+
+        if (transaction.related_transaction) {
+          result.related_transaction = {
+            ...transaction.related_transaction,
+            amount: this.centsToDollars(transaction.related_transaction.amount),
+          };
+        }
+
+        return result;
+      }) || []
+    );
   }
 
   async getTransactionById(userId: string, id: number) {
@@ -101,7 +131,21 @@ export class TransactionService {
       throw new ApiError(500, `Failed to fetch transaction: ${error.message}`);
     }
 
-    return transaction;
+    if (!transaction) return null;
+
+    const result: any = {
+      ...transaction,
+      amount: this.centsToDollars(transaction.amount),
+    };
+
+    if (transaction.related_transaction) {
+      result.related_transaction = {
+        ...transaction.related_transaction,
+        amount: this.centsToDollars(transaction.related_transaction.amount),
+      };
+    }
+
+    return result;
   }
 
   async updateTransaction(userId: string, id: number, data: TransactionUpdate) {
@@ -111,9 +155,11 @@ export class TransactionService {
       return null;
     }
 
+    const storageData = data.amount !== undefined ? { ...data, amount: this.dollarsToCents(data.amount) } : data;
+
     const { data: transaction, error } = await this.supabase
       .from("transactions")
-      .update(data)
+      .update(storageData)
       .eq("id", id)
       .eq("user_id", userId)
       .select()
@@ -123,7 +169,10 @@ export class TransactionService {
       throw new ApiError(500, `Failed to update transaction: ${error.message}`);
     }
 
-    return transaction;
+    return {
+      ...transaction,
+      amount: this.centsToDollars(transaction.amount),
+    };
   }
 
   async deleteTransaction(userId: string, id: number): Promise<boolean> {
@@ -185,24 +234,20 @@ export class TransactionService {
   }
 
   async createTransfer(command: ValidatedTransfer): Promise<TransferTransactionResponse> {
-    // Validate account ownership
     await this.validateAccountOwnership(command.user_id, command.source_account_id);
     if (command.destination_account_id !== null) {
       await this.validateAccountOwnership(command.user_id, command.destination_account_id);
     }
 
-    // Determine transaction type based on destination and amount
     const transactionType: TransactionType =
       command.destination_account_id === null ? (command.amount < 0 ? "expense" : "revenue") : "transfer";
 
     try {
-      // Create transactions
       if (transactionType === "transfer" && command.destination_account_id !== null) {
-        // Create source transaction
         const sourceTransaction = await this.createSingleTransaction({
           user_id: command.user_id,
           account_id: command.source_account_id,
-          amount: command.amount,
+          amount: this.dollarsToCents(-command.amount),
           transaction_date: command.transaction_date,
           description: command.description || null,
           transaction_type: transactionType,
@@ -211,11 +256,10 @@ export class TransactionService {
         });
 
         try {
-          // Create destination transaction
           const destinationTransaction = await this.createSingleTransaction({
             user_id: command.user_id,
             account_id: command.destination_account_id,
-            amount: -command.amount, // Opposite amount for destination
+            amount: this.dollarsToCents(command.amount),
             transaction_date: command.transaction_date,
             description: command.description || null,
             transaction_type: transactionType,
@@ -228,26 +272,29 @@ export class TransactionService {
             await this.updateTransactionRelation(sourceTransaction.id, destinationTransaction.id);
 
             return {
-              source_transaction: sourceTransaction,
-              destination_transaction: destinationTransaction,
+              source_transaction: {
+                ...sourceTransaction,
+                amount: this.centsToDollars(sourceTransaction.amount),
+              },
+              destination_transaction: {
+                ...destinationTransaction,
+                amount: this.centsToDollars(destinationTransaction.amount),
+              },
             };
           } catch (error) {
-            // Rollback both transactions if update fails
             await this.deleteTransactionInternal(destinationTransaction.id);
             await this.deleteTransactionInternal(sourceTransaction.id);
             throw error;
           }
         } catch (error) {
-          // Rollback source transaction if destination fails
           await this.deleteTransactionInternal(sourceTransaction.id);
           throw error;
         }
       } else {
-        // Handle expense or revenue
         const transaction = await this.createSingleTransaction({
           user_id: command.user_id,
           account_id: command.source_account_id,
-          amount: command.amount,
+          amount: this.dollarsToCents(command.amount),
           transaction_date: command.transaction_date,
           description: command.description || null,
           transaction_type: transactionType,
@@ -255,8 +302,12 @@ export class TransactionService {
           related_transaction_id: null,
         });
 
+        // Convert cents back to dollars for response
         return {
-          source_transaction: transaction,
+          source_transaction: {
+            ...transaction,
+            amount: this.centsToDollars(transaction.amount),
+          },
           destination_transaction: null,
         };
       }
