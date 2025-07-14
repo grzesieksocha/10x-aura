@@ -17,8 +17,9 @@ export const POST: APIRoute = async ({ cookies, request }) => {
       });
     }
 
-    return new Response(null, {
+    return new Response(JSON.stringify({ message: "Logged out successfully" }), {
       status: 200,
+      headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
     return new Response(JSON.stringify({ error: "Invalid request" }), {

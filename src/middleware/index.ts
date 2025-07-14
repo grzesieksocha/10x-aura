@@ -4,6 +4,7 @@ import { createSupabaseServerInstance } from "../db/supabase.client";
 
 // Public paths that don't require authentication
 const PUBLIC_PATHS = [
+  "/",
   "/login",
   "/register",
   "/reset-password",
@@ -31,6 +32,7 @@ export const onRequest = defineMiddleware(async ({ locals, cookies, url, request
   // Get user session
   const {
     data: { user },
+    error,
   } = await supabase.auth.getUser();
 
   if (user) {
@@ -39,6 +41,7 @@ export const onRequest = defineMiddleware(async ({ locals, cookies, url, request
     return next();
   } else {
     // User is not authenticated, redirect to login
+    console.log("Auth check failed for", url.pathname, "- Error:", error?.message || "No user");
     return redirect("/login");
   }
 });

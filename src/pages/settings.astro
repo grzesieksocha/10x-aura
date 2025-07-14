@@ -1,9 +1,25 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import ChangePasswordForm from "../components/auth/ChangePasswordForm";
+import LogoutButton from "../components/LogoutButton";
 ---
 
 <Layout>
-  <h1 class="text-2xl font-bold mb-4">Account Settings</h1>
-  <ChangePasswordForm client:load />
+  <div class="container mx-auto px-4 py-6">
+    <h1 class="text-2xl font-bold mb-6">Account Settings</h1>
+    
+    <div class="space-y-6">
+      <section>
+        <h2 class="text-lg font-semibold mb-4">Change Password</h2>
+        <ChangePasswordForm client:load />
+      </section>
+      
+      <section>
+        <h2 class="text-lg font-semibold mb-4">Account Actions</h2>
+        <div class="flex gap-4">
+          <LogoutButton client:load />
+        </div>
+      </section>
+    </div>
+  </div>
 </Layout>

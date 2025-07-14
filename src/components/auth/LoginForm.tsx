@@ -33,8 +33,8 @@ export default function LoginForm() {
         toast.error(data.error);
       } else {
         toast.success("Logged in successfully");
-        // Force page reload to ensure middleware picks up new session
-        window.location.reload();
+        // Redirect to dashboard
+        window.location.href = "/";
       }
     } catch (err) {
       setError("Network error");

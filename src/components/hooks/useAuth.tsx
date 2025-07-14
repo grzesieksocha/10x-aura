@@ -66,8 +66,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = async () => {
     setLoading(true);
     setError(null);
-    const { error } = await supabaseClient.auth.signOut();
-    if (error) setError(error.message);
+    
+    try {
+      // Call API endpoint to properly clear server-side session
+      const response = await fetch("/api/auth/logout", {
+        method: "POST",
+      });
+      
+      if (!response.ok) {
+        const data = await response.json();
+        setError(data.error);
+      }
+      
+      // Also clear client-side session
+      await supabaseClient.auth.signOut();
+    } catch (error) {
+      setError("Network error");
+    }
+    
     setUser(null);
     setLoading(false);
   };

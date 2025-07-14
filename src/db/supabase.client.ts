@@ -4,8 +4,8 @@ import type { AstroCookies } from "astro";
 
 import type { Database } from "./database.types";
 
-const supabaseUrl = import.meta.env.SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.SUPABASE_KEY;
+const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_KEY;
 
 // Client-side Supabase client (for React components)
 export const supabaseClient = createClient<Database>(supabaseUrl, supabaseAnonKey);
@@ -14,7 +14,7 @@ export type SupabaseClientType = typeof supabaseClient;
 // Server-side Supabase client configuration
 export const cookieOptions: CookieOptionsWithName = {
   path: "/",
-  secure: true,
+  secure: import.meta.env.PROD, // Only secure in production
   httpOnly: true,
   sameSite: "lax",
 };
@@ -41,5 +41,3 @@ export const createSupabaseServerInstance = (context: { headers: Headers; cookie
 
   return supabase;
 };
-
-export const DEFAULT_USER_ID = "2adeb8b4-3c9c-44bc-96b8-43ab1ddbddd1";
