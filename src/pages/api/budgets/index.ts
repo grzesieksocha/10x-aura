@@ -3,12 +3,15 @@ import { BudgetService } from "../../../lib/services/budget.service";
 import { handleApiError } from "../../../lib/api/errors";
 import { createBudgetSchema, budgetListParamsSchema } from "../../../lib/schemas/budget.schema";
 import { ApiError } from "../../../lib/api/errors";
-import { DEFAULT_USER_ID } from "../../../db/supabase.client";
 
 export const prerender = false;
 
 export const GET: APIRoute = async ({ url, locals }) => {
   try {
+    if (!locals.user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
+    }
+
     const year = url.searchParams.get("year");
     const page = url.searchParams.get("page");
     const limit = url.searchParams.get("limit");
@@ -26,7 +29,7 @@ export const GET: APIRoute = async ({ url, locals }) => {
 
     const budgetService = new BudgetService(locals.supabase);
     const budgets = await budgetService.getBudgets(
-      DEFAULT_USER_ID,
+      locals.user.id,
       result.data.year,
       result.data.page,
       result.data.limit
@@ -42,6 +45,10 @@ export const GET: APIRoute = async ({ url, locals }) => {
 
 export const POST: APIRoute = async ({ request, locals }) => {
   try {
+    if (!locals.user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
+    }
+
     const json = await request.json();
     const result = createBudgetSchema.safeParse(json);
 
@@ -50,7 +57,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     }
 
     const budgetService = new BudgetService(locals.supabase);
-    const budget = await budgetService.createBudget(DEFAULT_USER_ID, result.data);
+    const budget = await budgetService.createBudget(locals.user.id, result.data);
 
     return new Response(JSON.stringify(budget), {
       status: 201,

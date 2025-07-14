@@ -2,7 +2,6 @@ import type { APIRoute } from "astro";
 import { TransactionService } from "../../../lib/services/transaction.service";
 import { handleApiError } from "../../../lib/api/errors";
 import { ApiError } from "../../../lib/api/errors";
-import { DEFAULT_USER_ID } from "../../../db/supabase.client";
 import { z } from "zod";
 
 export const prerender = false;
@@ -30,6 +29,10 @@ const createTransactionSchema = z.object({
 
 export const GET: APIRoute = async ({ url, locals }) => {
   try {
+    if (!locals.user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
+    }
+
     const searchParams = Object.fromEntries(url.searchParams.entries());
     const result = querySchema.safeParse(searchParams);
 
@@ -38,7 +41,7 @@ export const GET: APIRoute = async ({ url, locals }) => {
     }
 
     const transactionService = new TransactionService(locals.supabase);
-    const transactions = await transactionService.listTransactions(DEFAULT_USER_ID, result.data);
+    const transactions = await transactionService.listTransactions(locals.user.id, result.data);
 
     return new Response(JSON.stringify(transactions), {
       status: 200,
@@ -50,6 +53,10 @@ export const GET: APIRoute = async ({ url, locals }) => {
 
 export const POST: APIRoute = async ({ request, locals }) => {
   try {
+    if (!locals.user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
+    }
+
     const json = await request.json();
     const result = createTransactionSchema.safeParse(json);
 
@@ -58,7 +65,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     }
 
     const transactionService = new TransactionService(locals.supabase);
-    const transaction = await transactionService.createTransaction(DEFAULT_USER_ID, result.data);
+    const transaction = await transactionService.createTransaction(locals.user.id, result.data);
 
     return new Response(JSON.stringify(transaction), {
       status: 201,

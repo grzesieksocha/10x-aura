@@ -1,11 +1,14 @@
 import type { APIRoute } from "astro";
 import { handleApiError } from "../../../lib/api/errors";
-import { DEFAULT_USER_ID } from "../../../db/supabase.client";
 
 export const prerender = false;
 
 export const GET: APIRoute = async ({ locals, request }) => {
   try {
+    if (!locals.user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
+    }
+
     // Parse request URL with base to support relative URLs
     const base = request.headers.get("origin") ?? "http://localhost";
     const url = new URL(request.url, base);
@@ -21,7 +24,7 @@ export const GET: APIRoute = async ({ locals, request }) => {
     const { data: txs, error } = await locals.supabase
       .from("transactions")
       .select("amount,categories(name)")
-      .eq("user_id", DEFAULT_USER_ID)
+      .eq("user_id", locals.user.id)
       .eq("transaction_type", "expense")
       .like("transaction_date", `${month}%`);
 

@@ -3,19 +3,22 @@ import { BudgetService } from "../../../lib/services/budget.service";
 import { handleApiError } from "../../../lib/api/errors";
 import { updateBudgetSchema } from "../../../lib/schemas/budget.schema";
 import { ApiError } from "../../../lib/api/errors";
-import { DEFAULT_USER_ID } from "../../../db/supabase.client";
 
 export const prerender = false;
 
 export const GET: APIRoute = async ({ params, locals }) => {
   try {
+    if (!locals.user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
+    }
+
     const budgetId = parseInt(params.budgetId ?? "", 10);
     if (isNaN(budgetId)) {
       throw new ApiError(400, "Invalid budget ID", "INVALID_PARAMETER");
     }
 
     const budgetService = new BudgetService(locals.supabase);
-    const budget = await budgetService.getBudgetById(DEFAULT_USER_ID, budgetId);
+    const budget = await budgetService.getBudgetById(locals.user.id, budgetId);
 
     if (!budget) {
       throw new ApiError(404, "Budget not found", "NOT_FOUND");
@@ -31,6 +34,10 @@ export const GET: APIRoute = async ({ params, locals }) => {
 
 export const PATCH: APIRoute = async ({ params, request, locals }) => {
   try {
+    if (!locals.user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
+    }
+
     const budgetId = parseInt(params.budgetId ?? "", 10);
     if (isNaN(budgetId)) {
       throw new ApiError(400, "Invalid budget ID", "INVALID_PARAMETER");
@@ -44,7 +51,7 @@ export const PATCH: APIRoute = async ({ params, request, locals }) => {
     }
 
     const budgetService = new BudgetService(locals.supabase);
-    const budget = await budgetService.updateBudget(DEFAULT_USER_ID, budgetId, result.data);
+    const budget = await budgetService.updateBudget(locals.user.id, budgetId, result.data);
 
     return new Response(JSON.stringify(budget), {
       status: 200,
@@ -56,13 +63,17 @@ export const PATCH: APIRoute = async ({ params, request, locals }) => {
 
 export const DELETE: APIRoute = async ({ params, locals }) => {
   try {
+    if (!locals.user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
+    }
+
     const budgetId = parseInt(params.budgetId ?? "", 10);
     if (isNaN(budgetId)) {
       throw new ApiError(400, "Invalid budget ID", "INVALID_PARAMETER");
     }
 
     const budgetService = new BudgetService(locals.supabase);
-    const success = await budgetService.deleteBudget(DEFAULT_USER_ID, budgetId);
+    const success = await budgetService.deleteBudget(locals.user.id, budgetId);
 
     if (!success) {
       throw new ApiError(404, "Budget not found", "NOT_FOUND");

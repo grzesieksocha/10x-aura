@@ -2,7 +2,6 @@ import type { APIRoute } from "astro";
 import { TransactionService } from "../../../lib/services/transaction.service";
 import { handleApiError } from "../../../lib/api/errors";
 import { ApiError } from "../../../lib/api/errors";
-import { DEFAULT_USER_ID } from "../../../db/supabase.client";
 import { z } from "zod";
 
 export const prerender = false;
@@ -16,13 +15,17 @@ const updateTransactionSchema = z.object({
 
 export const GET: APIRoute = async ({ params, locals }) => {
   try {
+    if (!locals.user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
+    }
+
     const transactionId = parseInt(params.id ?? "", 10);
     if (isNaN(transactionId)) {
       throw new ApiError(400, "Invalid transaction ID: parameter must be a number");
     }
 
     const transactionService = new TransactionService(locals.supabase);
-    const transaction = await transactionService.getTransactionById(DEFAULT_USER_ID, transactionId);
+    const transaction = await transactionService.getTransactionById(locals.user.id, transactionId);
 
     if (!transaction) {
       throw new ApiError(404, "Transaction not found");
@@ -38,6 +41,10 @@ export const GET: APIRoute = async ({ params, locals }) => {
 
 export const PUT: APIRoute = async ({ request, params, locals }) => {
   try {
+    if (!locals.user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
+    }
+
     const transactionId = parseInt(params.id ?? "", 10);
     if (isNaN(transactionId)) {
       throw new ApiError(400, "Invalid transaction ID: parameter must be a number");
@@ -51,7 +58,7 @@ export const PUT: APIRoute = async ({ request, params, locals }) => {
     }
 
     const transactionService = new TransactionService(locals.supabase);
-    const transaction = await transactionService.updateTransaction(DEFAULT_USER_ID, transactionId, result.data);
+    const transaction = await transactionService.updateTransaction(locals.user.id, transactionId, result.data);
 
     if (!transaction) {
       throw new ApiError(404, "Transaction not found");
@@ -67,13 +74,17 @@ export const PUT: APIRoute = async ({ request, params, locals }) => {
 
 export const DELETE: APIRoute = async ({ params, locals }) => {
   try {
+    if (!locals.user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
+    }
+
     const transactionId = parseInt(params.id ?? "", 10);
     if (isNaN(transactionId)) {
       throw new ApiError(400, "Invalid transaction ID: parameter must be a number");
     }
 
     const transactionService = new TransactionService(locals.supabase);
-    const success = await transactionService.deleteTransaction(DEFAULT_USER_ID, transactionId);
+    const success = await transactionService.deleteTransaction(locals.user.id, transactionId);
 
     if (!success) {
       throw new ApiError(404, "Transaction not found");

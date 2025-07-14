@@ -3,12 +3,15 @@ import { TransactionService } from "../../../lib/services/transaction.service";
 import { transferTransactionSchema } from "../../../lib/schemas/transfer.schema";
 import { handleApiError } from "../../../lib/api/errors";
 import { ApiError } from "../../../lib/api/errors";
-import { DEFAULT_USER_ID } from "../../../db/supabase.client";
 
 export const prerender = false;
 
 export const POST: APIRoute = async ({ request, locals }) => {
   try {
+    if (!locals.user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
+    }
+
     let json;
     try {
       json = await request.json();
@@ -25,7 +28,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     const transactionService = new TransactionService(locals.supabase);
     const transfer = await transactionService.createTransfer({
       ...result.data,
-      user_id: DEFAULT_USER_ID,
+      user_id: locals.user.id,
     });
 
     return new Response(JSON.stringify(transfer), {

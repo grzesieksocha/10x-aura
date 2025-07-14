@@ -3,19 +3,22 @@ import { CategoryService } from "../../../lib/services/category.service";
 import { handleApiError } from "../../../lib/api/errors";
 import { updateCategorySchema } from "../../../lib/schemas/category.schema";
 import { ApiError } from "../../../lib/api/errors";
-import { DEFAULT_USER_ID } from "../../../db/supabase.client";
 
 export const prerender = false;
 
 export const GET: APIRoute = async ({ params, locals }) => {
   try {
+    if (!locals.user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
+    }
+
     const categoryId = parseInt(params.categoryId ?? "", 10);
     if (isNaN(categoryId)) {
       throw new ApiError(400, "Invalid category ID: parameter must be a number");
     }
 
     const categoryService = new CategoryService(locals.supabase);
-    const category = await categoryService.getCategoryById(DEFAULT_USER_ID, categoryId);
+    const category = await categoryService.getCategoryById(locals.user.id, categoryId);
 
     if (!category) {
       throw new ApiError(404, "Category not found");
@@ -31,6 +34,10 @@ export const GET: APIRoute = async ({ params, locals }) => {
 
 export const PUT: APIRoute = async ({ request, params, locals }) => {
   try {
+    if (!locals.user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
+    }
+
     const categoryId = parseInt(params.categoryId ?? "", 10);
     if (isNaN(categoryId)) {
       throw new ApiError(400, "Invalid category ID: parameter must be a number");
@@ -44,7 +51,7 @@ export const PUT: APIRoute = async ({ request, params, locals }) => {
     }
 
     const categoryService = new CategoryService(locals.supabase);
-    const category = await categoryService.updateCategory(DEFAULT_USER_ID, categoryId, result.data);
+    const category = await categoryService.updateCategory(locals.user.id, categoryId, result.data);
 
     if (!category) {
       throw new ApiError(404, "Category not found");
@@ -60,13 +67,17 @@ export const PUT: APIRoute = async ({ request, params, locals }) => {
 
 export const DELETE: APIRoute = async ({ params, locals }) => {
   try {
+    if (!locals.user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
+    }
+
     const categoryId = parseInt(params.categoryId ?? "", 10);
     if (isNaN(categoryId)) {
       throw new ApiError(400, "Invalid category ID: parameter must be a number");
     }
 
     const categoryService = new CategoryService(locals.supabase);
-    const success = await categoryService.deleteCategory(DEFAULT_USER_ID, categoryId);
+    const success = await categoryService.deleteCategory(locals.user.id, categoryId);
 
     if (!success) {
       throw new ApiError(404, "Category not found");

@@ -3,12 +3,15 @@ import { AccountService } from "../../../lib/services/account.service";
 import { TransactionService } from "../../../lib/services/transaction.service";
 import { handleApiError } from "../../../lib/api/errors";
 import { updateAccountSchema } from "../../../lib/schemas/account.schema";
-import { DEFAULT_USER_ID } from "../../../db/supabase.client";
 
 export const prerender = false;
 
 export const GET: APIRoute = async ({ locals, params }) => {
   try {
+    if (!locals.user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
+    }
+
     const accountId = Number(params.accountId);
     if (isNaN(accountId)) {
       return new Response(JSON.stringify({ error: "Invalid account ID" }), { status: 400 });
@@ -16,7 +19,7 @@ export const GET: APIRoute = async ({ locals, params }) => {
 
     const transactionService = new TransactionService(locals.supabase);
     const accountService = new AccountService(locals.supabase, transactionService);
-    const account = await accountService.getAccountById(DEFAULT_USER_ID, accountId);
+    const account = await accountService.getAccountById(locals.user.id, accountId);
 
     if (!account) {
       return new Response(JSON.stringify({ error: "Account not found" }), { status: 404 });
@@ -30,6 +33,10 @@ export const GET: APIRoute = async ({ locals, params }) => {
 
 export const PUT: APIRoute = async ({ request, params, locals }) => {
   try {
+    if (!locals.user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
+    }
+
     const accountId = Number(params.accountId);
     if (isNaN(accountId)) {
       return new Response(JSON.stringify({ error: "Invalid account ID" }), { status: 400 });
@@ -44,7 +51,7 @@ export const PUT: APIRoute = async ({ request, params, locals }) => {
 
     const transactionService = new TransactionService(locals.supabase);
     const accountService = new AccountService(locals.supabase, transactionService);
-    const account = await accountService.updateAccount(DEFAULT_USER_ID, accountId, result.data);
+    const account = await accountService.updateAccount(locals.user.id, accountId, result.data);
 
     if (!account) {
       return new Response(JSON.stringify({ error: "Account not found" }), { status: 404 });
@@ -58,6 +65,10 @@ export const PUT: APIRoute = async ({ request, params, locals }) => {
 
 export const DELETE: APIRoute = async ({ locals, params }) => {
   try {
+    if (!locals.user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
+    }
+
     const accountId = Number(params.accountId);
     if (isNaN(accountId)) {
       return new Response(JSON.stringify({ error: "Invalid account ID" }), { status: 400 });
@@ -65,7 +76,7 @@ export const DELETE: APIRoute = async ({ locals, params }) => {
 
     const transactionService = new TransactionService(locals.supabase);
     const accountService = new AccountService(locals.supabase, transactionService);
-    const success = await accountService.deleteAccount(DEFAULT_USER_ID, accountId);
+    const success = await accountService.deleteAccount(locals.user.id, accountId);
 
     if (!success) {
       return new Response(JSON.stringify({ error: "Account not found" }), { status: 404 });

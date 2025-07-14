@@ -2,6 +2,8 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+Additional AI instructions and specifications can be found in the `.ai/` and `.cursor/rules/` folders.
+
 ## Project Overview
 
 Aura is a personal budget management web application built with Astro 5, React 19, TypeScript, and Supabase. The app allows users to track incomes, expenses, and transfers across multiple financial accounts with manual data entry. It features budgeting, analytics, and category management.
