@@ -1,0 +1,9 @@
+---
+import Layout from "../layouts/Layout.astro";
+import ChangePasswordForm from "../components/auth/ChangePasswordForm";
+---
+
+<Layout>
+  <h1 class="text-2xl font-bold mb-4">Account Settings</h1>
+  <ChangePasswordForm client:load />
+</Layout>

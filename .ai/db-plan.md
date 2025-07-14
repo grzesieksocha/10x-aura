@@ -132,7 +132,7 @@ CREATE POLICY select_accounts ON Accounts
 -- Similar RLS policies should be created for Transactions, Categories, and Budget tables.
 ```
 
-*Note:* Actual RLS implementations might differ based on Supabase configuration and project-specific requirements.
+_Note:_ Actual RLS implementations might differ based on Supabase configuration and project-specific requirements.
 
 ---
 
@@ -149,4 +149,4 @@ CREATE POLICY select_accounts ON Accounts
 
 ---
 
-This schema serves as the basis for creating database migrations and further optimizing the data model according to application performance needs and evolving product requirements. 
+This schema serves as the basis for creating database migrations and further optimizing the data model according to application performance needs and evolving product requirements.

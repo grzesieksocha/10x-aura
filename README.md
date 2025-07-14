@@ -13,15 +13,18 @@ Aura (MVP) is a responsive web application designed to help users efficiently ma
 ## Getting Started Locally
 
 1. **Prerequisites:**
+
    - Ensure you have [Node.js](https://nodejs.org/) installed (refer to the version specified in the `.nvmrc` file).
 
 2. **Clone the repository:**
+
    ```bash
    git clone https://github.com/grzesieksocha/10x-aura
    cd 10x-aura
    ```
 
 3. **Install dependencies:**
+
    ```bash
    npm install
    ```
@@ -46,18 +49,22 @@ Aura (MVP) is a responsive web application designed to help users efficiently ma
 Aura (MVP) includes the following core features:
 
 - **Account Management:**
+
   - Add, view, and delete multiple financial accounts with initial balances.
   - Automatic balance calculation based on initial balance and associated transaction history.
 
 - **Transaction Management:**
+
   - Record incomes, expenses, and transfers (with appropriate paired entries for transfers).
   - Assign categories to transactions to track spending and budget adherence.
 
 - **Budgeting:**
+
   - Plan monthly or yearly budgets by manually entering expected incomes and expenses.
   - Visual comparison of planned versus actual spending using color indicators.
 
 - **Analytics and Dashboard:**
+
   - Overview of total balance across all accounts.
   - Detailed transaction history for individual accounts.
   - Graphical representations (e.g., pie charts) of expense distribution by category.
@@ -73,4 +80,4 @@ This project is currently in the MVP phase and is under active development. Cont
 
 ## License
 
-This project is licensed under the MIT License. 
+This project is licensed under the MIT License.
