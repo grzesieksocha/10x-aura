@@ -4,6 +4,34 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Additional AI instructions and specifications can be found in the `.ai/` and `.cursor/rules/` folders.
 
+## AI Instructions (.ai folder)
+
+The `.ai/` folder contains comprehensive AI instructions and project specifications:
+
+### Core Documentation
+- **`prd.md`** - Product Requirements Document (PRD) for Aura MVP with user stories and acceptance criteria
+- **`techstack.md`** - Technical stack overview (Astro, React, Supabase, etc.)
+- **`auth-spec.md`** - Authentication architecture specification with Supabase Auth integration
+- **`api-plan.md`** - REST API plan with endpoints, validation, and business logic
+- **`ui-plan.md`** - UI architecture plan with views, navigation, and component structure
+- **`db-plan.md`** - Database schema design with tables, relationships, and RLS policies
+
+### Development Rules (.ai/rules/)
+- **`shared.mdc`** - General coding practices and project structure guidelines
+- **`astro.mdc`** - Astro-specific guidelines for SSR, API routes, and View Transitions
+- **`react.mdc`** - React best practices with hooks, performance optimization, and patterns
+- **`frontend.mdc`** - Frontend guidelines for Tailwind CSS, accessibility, and component structure
+- **`backend.mdc`** - Backend guidelines for Supabase integration and data validation
+- **`ui-shadcn-helper.mdc`** - Shadcn/ui component usage and installation guide
+- **`supabase-auth.mdc`** - Supabase Auth integration guide with SSR support
+- **`db-supabase-migrations.mdc`** - Database migration guidelines and RLS policy creation
+- **`test-plan.mdc`** - Testing framework and quality assurance guidelines
+- **`api-supabase-astro-init.mdc`** - API initialization and Supabase client setup
+
+### Implementation Plans
+- **`api-implementations/`** - Detailed API implementation plans for accounts, categories, transactions, and budget
+- **`ui-implementations/`** - UI implementation plans for dashboard, account details, and category views
+
 ## Project Overview
 
 Aura is a personal budget management web application built with Astro 5, React 19, TypeScript, and Supabase. The app allows users to track incomes, expenses, and transfers across multiple financial accounts with manual data entry. It features budgeting, analytics, and category management.
