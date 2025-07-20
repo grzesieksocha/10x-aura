@@ -146,20 +146,49 @@ Zapewnienie wysokiej jakości i niezawodności aplikacji Aura MVP - responsywnej
 ## 6. Narzędzia do testowania
 
 ### 6.1 Framework testowy
-- **Vitest**: Testy jednostkowe i integracyjne (szybki, kompatybilny z Vite)
-- **React Testing Library**: Testowanie komponentów React
+- **Vitest**: Testy jednostkowe i integracyjne (szybki, kompatybilny z Vite i Astro)
+  - Konfiguracja: `vitest.config.ts` z integracją TypeScript
+  - Wsparcie dla ES modules i nowoczesnego JavaScript
+  - Wbudowane pokrycie kodu (coverage)
+- **React Testing Library**: Testowanie komponentów React z user-centric podejściem
+  - Testowanie zachowań komponentów z perspektywy użytkownika
+  - Integracja z jsdom dla symulacji DOM
+  - Utilities do testowania hooks (`@testing-library/react-hooks`)
 - **Playwright**: Testy E2E wieloprzeglądarkowe
+  - Wsparcie dla Chrome, Firefox, Safari, Edge
+  - Headless i headed mode
+  - Automatyczne screenshots i video recording przy błędach
+  - Parallel test execution
 
 ### 6.2 Narzędzia pomocnicze
 - **MSW (Mock Service Worker)**: Mockowanie API w testach
+  - Interceptowanie requestów HTTP na poziomie service worker
+  - Wspólne mock handlers dla unit i integration testów
+  - Obsługa REST API i GraphQL
 - **Supabase Local Development**: Lokalna instancja do testów
-- **Accessibility**: axe-core dla testów dostępności
-- **Performance**: Lighthouse CI dla testów wydajności
+  - Docker-based local setup
+  - Izolowane środowisko testowe
+  - Migracje i seed data
+- **@axe-core/playwright**: Testy dostępności w testach E2E
+  - Automatyczne wykrywanie problemów accessibility
+  - Integracja z Playwright
+- **Lighthouse CI**: Testy wydajności i quality metrics
+  - Performance, Accessibility, Best Practices, SEO
+  - Integracja z CI/CD pipeline
 
 ### 6.3 CI/CD integracja
 - **GitHub Actions**: Automatyczne uruchamianie testów
-- **Pre-commit hooks**: Testy przed commitami (Husky + lint-staged)
+  - Matrix testing dla różnych wersji Node.js
+  - Parallel job execution dla różnych typów testów
+  - Artifact uploading (coverage reports, test results)
+- **Pre-commit hooks**: Testy przed commitami
+  - Husky + lint-staged dla git hooks
+  - Uruchamianie unit testów przed push
+  - ESLint, Prettier, TypeScript check
 - **Coverage reports**: Raportowanie pokrycia kodu
+  - Vitest coverage z v8 provider
+  - Codecov integration dla visual reports
+  - Threshold enforcement w CI
 
 ## 7. Harmonogram testów
 

@@ -44,6 +44,14 @@ Aura (MVP) is a responsive web application designed to help users efficiently ma
 - `npm run lint:fix` - Automatically fixes linting issues where possible.
 - `npm run format` - Formats the code using Prettier.
 
+## Testing
+
+- **Unit Tests**: Vitest - Fast unit testing framework compatible with Vite
+- **Component Tests**: React Testing Library - Testing React components with user-centric approach
+- **E2E Tests**: Playwright - Cross-browser end-to-end testing framework
+- **API Mocking**: MSW (Mock Service Worker) - API mocking for tests
+- **Coverage**: Built-in Vitest coverage reporting
+
 ## Project Scope
 
 Aura (MVP) includes the following core features:
