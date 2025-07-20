@@ -2,11 +2,11 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-Additional AI instructions and specifications can be found in the `.ai/` and `.cursor/rules/` folders.
+Additional AI instructions and specifications can be found in the `ai/` folder.
 
-## AI Instructions (.ai folder)
+## AI Instructions (ai folder)
 
-The `.ai/` folder contains comprehensive AI instructions and project specifications:
+The `ai/` folder contains comprehensive AI instructions and project specifications:
 
 ### Core Documentation
 - **`prd.md`** - Product Requirements Document (PRD) for Aura MVP with user stories and acceptance criteria
@@ -16,7 +16,7 @@ The `.ai/` folder contains comprehensive AI instructions and project specificati
 - **`ui-plan.md`** - UI architecture plan with views, navigation, and component structure
 - **`db-plan.md`** - Database schema design with tables, relationships, and RLS policies
 
-### Development Rules (.ai/rules/)
+### Development Rules (ai/rules/)
 - **`shared.mdc`** - General coding practices and project structure guidelines
 - **`astro.mdc`** - Astro-specific guidelines for SSR, API routes, and View Transitions
 - **`react.mdc`** - React best practices with hooks, performance optimization, and patterns
@@ -31,6 +31,7 @@ The `.ai/` folder contains comprehensive AI instructions and project specificati
 ### Implementation Plans
 - **`api-implementations/`** - Detailed API implementation plans for accounts, categories, transactions, and budget
 - **`ui-implementations/`** - UI implementation plans for dashboard, account details, and category views
+- **`test-plan.md`** - Comprehensive testing strategy and framework documentation
 
 ## Project Overview
 
@@ -148,4 +149,4 @@ src/
 
 ## Testing
 
-Check for existing test scripts in package.json. Currently no test framework is configured - verify testing approach before implementing tests.
+Testing framework configured with Vitest for unit tests, React Testing Library for component tests, and Playwright for E2E testing. See `ai/test-plan.md` for comprehensive testing strategy and implementation details.
