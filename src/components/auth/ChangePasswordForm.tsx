@@ -3,7 +3,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { supabaseClient } from "@/db/supabase.client";
 import { toast } from "sonner";
 
 export default function ChangePasswordForm() {
@@ -24,14 +23,30 @@ export default function ChangePasswordForm() {
     setLoading(true);
     setError(null);
 
-    const { error } = await supabaseClient.auth.updateUser({ password: newPassword });
+    try {
+      const response = await fetch("/api/auth/change-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ newPassword }),
+      });
 
-    if (error) {
-      setError(error.message);
-      toast.error(error.message);
-    } else {
-      setSuccess(true);
-      toast.success("Password changed successfully.");
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.error);
+        toast.error(data.error);
+      } else {
+        setSuccess(true);
+        toast.success("Password changed successfully.");
+        setOldPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
+      }
+    } catch {
+      setError("Network error");
+      toast.error("Network error");
     }
 
     setLoading(false);

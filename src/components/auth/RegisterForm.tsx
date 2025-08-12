@@ -38,10 +38,10 @@ export default function RegisterForm() {
         setError(data.error);
         toast.error(data.error);
       } else {
-        toast.success("Registration successful! Please log in.");
-        window.location.href = "/login";
+        toast.success("Registration successful! Redirecting to dashboard...");
+        window.location.href = "/dashboard";
       }
-    } catch (err) {
+    } catch {
       setError("Network error");
       toast.error("Network error");
     }

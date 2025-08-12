@@ -4,7 +4,6 @@ import { createSupabaseServerInstance } from "../db/supabase.client";
 
 // Public paths that don't require authentication
 const PUBLIC_PATHS = [
-  "/",
   "/login",
   "/register",
   "/reset-password",
