@@ -9,6 +9,7 @@ Additional AI instructions and specifications can be found in the `ai/` folder.
 The `ai/` folder contains comprehensive AI instructions and project specifications:
 
 ### Core Documentation
+
 - **`prd.md`** - Product Requirements Document (PRD) for Aura MVP with user stories and acceptance criteria
 - **`techstack.md`** - Technical stack overview (Astro, React, Supabase, etc.)
 - **`auth-spec.md`** - Authentication architecture specification with Supabase Auth integration
@@ -17,6 +18,7 @@ The `ai/` folder contains comprehensive AI instructions and project specificatio
 - **`db-plan.md`** - Database schema design with tables, relationships, and RLS policies
 
 ### Development Rules (ai/rules/)
+
 - **`shared.mdc`** - General coding practices and project structure guidelines
 - **`astro.mdc`** - Astro-specific guidelines for SSR, API routes, and View Transitions
 - **`react.mdc`** - React best practices with hooks, performance optimization, and patterns
@@ -29,6 +31,7 @@ The `ai/` folder contains comprehensive AI instructions and project specificatio
 - **`api-supabase-astro-init.mdc`** - API initialization and Supabase client setup
 
 ### Implementation Plans
+
 - **`api-implementations/`** - Detailed API implementation plans for accounts, categories, transactions, and budget
 - **`ui-implementations/`** - UI implementation plans for dashboard, account details, and category views
 - **`test-plan.md`** - Comprehensive testing strategy and framework documentation

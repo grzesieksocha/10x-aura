@@ -29,12 +29,7 @@ export default function LogoutButton() {
   };
 
   return (
-    <Button
-      variant="outline"
-      size="sm"
-      onClick={handleLogout}
-      disabled={loading}
-    >
+    <Button variant="outline" size="sm" onClick={handleLogout} disabled={loading}>
       {loading ? "Logging out..." : "Logout"}
     </Button>
   );
