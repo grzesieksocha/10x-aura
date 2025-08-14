@@ -1,7 +1,7 @@
 import { useAccountDetails } from "@/components/hooks/useAccountDetails";
 import { useTransactions } from "@/components/hooks/useTransactions";
-import { TransactionFilters } from "@/components/account/TransactionFilters";
-import { TransactionList } from "@/components/account/TransactionList";
+import { TransactionFilters } from "@/components/transactions/TransactionFilters";
+import { TransactionList } from "@/components/transactions/TransactionList";
 import { AccountHeader } from "@/components/account/AccountHeader";
 
 interface AccountDetailsViewProps {

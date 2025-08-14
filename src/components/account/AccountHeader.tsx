@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { DashboardAccount } from "@/types";
-import { TransactionFormContainer } from "./TransactionFormContainer";
+import { TransactionFormContainer } from "../transactions/TransactionFormContainer";
 
 interface AccountHeaderProps {
   account: DashboardAccount;
