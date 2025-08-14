@@ -4,7 +4,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
-import type { TransactionFilters as TransactionFiltersType } from "@/components/hooks/useTransactions";
+import type { TransactionFilters as TransactionFiltersType } from "@/lib/hooks/useTransactions";
 
 interface TransactionFiltersProps {
   filters: TransactionFiltersType;

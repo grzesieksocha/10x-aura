@@ -1,10 +1,10 @@
 import { Button } from "@/components/ui/button";
 
-interface PageHeaderProps {
+interface CategoriesPageHeaderProps {
   onAddClick: () => void;
 }
 
-export function PageHeader({ onAddClick }: PageHeaderProps) {
+export function CategoriesPageHeader({ onAddClick }: CategoriesPageHeaderProps) {
   return (
     <div className="flex items-center justify-between">
       <div>

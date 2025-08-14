@@ -11,8 +11,8 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: [
-    ["html", { outputFolder: "test-reports/playwright" }], 
-    ["json", { outputFile: "test-reports/playwright/results.json" }]
+    ["html", { outputFolder: "test-reports/playwright" }],
+    ["json", { outputFile: "test-reports/playwright/results.json" }],
   ],
   use: {
     baseURL: "http://localhost:3000",

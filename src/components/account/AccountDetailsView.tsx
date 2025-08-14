@@ -1,5 +1,5 @@
-import { useAccountDetails } from "@/components/hooks/useAccountDetails";
-import { useTransactions } from "@/components/hooks/useTransactions";
+import { useAccountDetails } from "@/lib/hooks/useAccountDetails";
+import { useTransactions } from "@/lib/hooks/useTransactions";
 import { TransactionFilters } from "@/components/transactions/TransactionFilters";
 import { TransactionList } from "@/components/transactions/TransactionList";
 import { AccountHeader } from "@/components/account/AccountHeader";

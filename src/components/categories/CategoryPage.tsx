@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
-import { useCategories } from "@/components/hooks/useCategories";
-import { PageHeader } from "@/components/categories/PageHeader";
+import { useCategories } from "@/lib/hooks/useCategories";
+import { CategoriesPageHeader } from "@/components/categories/CategoriesPageHeader";
 import { CategoryList } from "@/components/categories/CategoryList";
 import { CategoryFormModal } from "@/components/categories/CategoryFormModal";
 import { CategoryFilters } from "@/components/categories/CategoryFilters";
@@ -73,7 +73,7 @@ export default function CategoryPage() {
 
   return (
     <div className="container px-6 py-6 space-y-6">
-      <PageHeader onAddClick={handleAddCategory} />
+      <CategoriesPageHeader onAddClick={handleAddCategory} />
 
       <CategoryFilters filters={filters} onFiltersChange={handleFilterChange} />
 
