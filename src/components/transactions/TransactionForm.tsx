@@ -198,7 +198,6 @@ export function TransactionForm({
                       date: date ? format(date, "yyyy-MM-dd") : "",
                     })
                   }
-                  initialFocus
                 />
               </PopoverContent>
             </Popover>

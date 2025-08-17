@@ -33,9 +33,9 @@ export const onRequest = defineMiddleware(async ({ locals, cookies, url, request
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (user) {
+  if (user && user.email) {
     // User is authenticated
-    locals.user = user;
+    locals.user = { id: user.id, email: user.email };
     return next();
   } else {
     // User is not authenticated, redirect to login

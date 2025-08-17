@@ -44,7 +44,6 @@ export function TransactionFilters({ filters, onFilterChange }: TransactionFilte
                   mode="single"
                   selected={filters.dateFrom ? new Date(filters.dateFrom) : undefined}
                   onSelect={handleDateFromSelect}
-                  initialFocus
                 />
               </PopoverContent>
             </Popover>
@@ -63,7 +62,6 @@ export function TransactionFilters({ filters, onFilterChange }: TransactionFilte
                   mode="single"
                   selected={filters.dateTo ? new Date(filters.dateTo) : undefined}
                   onSelect={handleDateToSelect}
-                  initialFocus
                 />
               </PopoverContent>
             </Popover>

@@ -5,7 +5,7 @@ import { ApiError } from "../api/errors";
 
 type TransactionInsert = Database["public"]["Tables"]["transactions"]["Insert"];
 type TransactionUpdate = Database["public"]["Tables"]["transactions"]["Update"];
-type TransactionRow = Database["public"]["Tables"]["transactions"]["Row"];
+// type TransactionRow = Database["public"]["Tables"]["transactions"]["Row"];
 type TransactionType = Database["public"]["Enums"]["transaction_type_enum"];
 
 export interface TransactionFilters {
@@ -96,13 +96,22 @@ export class TransactionService {
     }
 
     return (
-      transactions?.map((transaction: TransactionRow & { related_transaction?: TransactionRow }) => {
+      transactions?.map((transaction: any) => {
         const result = {
           ...transaction,
           amount: this.centsToDollars(transaction.amount),
         };
 
-        if (transaction.related_transaction) {
+        if (
+          transaction.related_transaction &&
+          Array.isArray(transaction.related_transaction) &&
+          transaction.related_transaction.length > 0
+        ) {
+          result.related_transaction = {
+            ...transaction.related_transaction[0],
+            amount: this.centsToDollars(transaction.related_transaction[0].amount),
+          };
+        } else if (transaction.related_transaction && !Array.isArray(transaction.related_transaction)) {
           result.related_transaction = {
             ...transaction.related_transaction,
             amount: this.centsToDollars(transaction.related_transaction.amount),
@@ -134,15 +143,20 @@ export class TransactionService {
 
     if (!transaction) return null;
 
-    const result: TransactionRow & { related_transaction?: TransactionRow } & { amount: number } = {
+    const result: any = {
       ...transaction,
       amount: this.centsToDollars(transaction.amount),
     };
 
-    if (transaction.related_transaction) {
+    if (
+      transaction.related_transaction &&
+      Array.isArray(transaction.related_transaction) &&
+      transaction.related_transaction.length > 0
+    ) {
+      const relatedTx = transaction.related_transaction[0] as any;
       result.related_transaction = {
-        ...transaction.related_transaction,
-        amount: this.centsToDollars(transaction.related_transaction.amount),
+        ...relatedTx,
+        amount: this.centsToDollars(relatedTx.amount),
       };
     }
 
