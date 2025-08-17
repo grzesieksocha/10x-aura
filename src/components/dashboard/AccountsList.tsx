@@ -8,7 +8,7 @@ interface AccountsListProps {
 
 const AccountsList: React.FC<AccountsListProps> = ({ accounts }) => {
   if (accounts.length === 0) {
-    return <div>Brak kont do wyświetlenia</div>;
+    return <div>No accounts to display</div>;
   }
 
   return (

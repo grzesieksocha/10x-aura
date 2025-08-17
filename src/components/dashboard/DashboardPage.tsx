@@ -14,10 +14,10 @@ const DashboardPage: React.FC = () => {
   const { accounts, totalBalance, breakdown, loading, error } = useDashboardData(selectedMonth);
 
   if (loading) {
-    return <div>Ładowanie...</div>;
+    return <div>Loading...</div>;
   }
   if (error) {
-    return <div className="text-red-500">Błąd: {error.message}</div>;
+    return <div className="text-red-500">Error: {error.message}</div>;
   }
 
   // Generate year and month options
@@ -32,11 +32,11 @@ const DashboardPage: React.FC = () => {
         <div className="flex flex-wrap items-end gap-4 mb-2">
           <div>
             <label htmlFor="year-select" className="block text-sm font-medium mb-1">
-              Rok
+              Year
             </label>
             <Select value={year.toString()} onValueChange={(v) => setYear(Number(v))}>
               <SelectTrigger id="year-select" className="w-24">
-                <SelectValue placeholder="Rok" />
+                <SelectValue placeholder="Year" />
               </SelectTrigger>
               <SelectContent>
                 {years.map((y) => (
@@ -49,11 +49,11 @@ const DashboardPage: React.FC = () => {
           </div>
           <div>
             <label htmlFor="month-select" className="block text-sm font-medium mb-1">
-              Miesiąc
+              Month
             </label>
             <Select value={month.toString()} onValueChange={(v) => setMonth(Number(v))}>
               <SelectTrigger id="month-select" className="w-32">
-                <SelectValue placeholder="Miesiąc" />
+                <SelectValue placeholder="Month" />
               </SelectTrigger>
               <SelectContent>
                 {months.map((m) => (
