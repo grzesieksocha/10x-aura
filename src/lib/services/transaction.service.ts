@@ -5,8 +5,13 @@ import { ApiError } from "../api/errors";
 
 type TransactionInsert = Database["public"]["Tables"]["transactions"]["Insert"];
 type TransactionUpdate = Database["public"]["Tables"]["transactions"]["Update"];
-// type TransactionRow = Database["public"]["Tables"]["transactions"]["Row"];
+type TransactionRow = Database["public"]["Tables"]["transactions"]["Row"];
 type TransactionType = Database["public"]["Enums"]["transaction_type_enum"];
+
+interface TransactionWithRelated extends TransactionRow {
+  category?: { id: number; name: string; is_revenue: boolean } | null;
+  related_transaction?: TransactionRow[] | TransactionRow | null;
+}
 
 export interface TransactionFilters {
   accountId?: number;
@@ -96,26 +101,18 @@ export class TransactionService {
     }
 
     return (
-      transactions?.map((transaction: any) => {
+      transactions?.map((transaction: TransactionWithRelated) => {
         const result = {
           ...transaction,
           amount: this.centsToDollars(transaction.amount),
         };
 
-        if (
-          transaction.related_transaction &&
-          Array.isArray(transaction.related_transaction) &&
-          transaction.related_transaction.length > 0
-        ) {
-          result.related_transaction = {
-            ...transaction.related_transaction[0],
-            amount: this.centsToDollars(transaction.related_transaction[0].amount),
-          };
-        } else if (transaction.related_transaction && !Array.isArray(transaction.related_transaction)) {
-          result.related_transaction = {
-            ...transaction.related_transaction,
-            amount: this.centsToDollars(transaction.related_transaction.amount),
-          };
+        if (transaction.related_transaction) {
+          if (Array.isArray(transaction.related_transaction) && transaction.related_transaction.length > 0) {
+            result.related_transaction = transaction.related_transaction[0];
+          } else if (!Array.isArray(transaction.related_transaction)) {
+            result.related_transaction = transaction.related_transaction;
+          }
         }
 
         return result;
@@ -143,21 +140,17 @@ export class TransactionService {
 
     if (!transaction) return null;
 
-    const result: any = {
+    const result = {
       ...transaction,
       amount: this.centsToDollars(transaction.amount),
     };
 
-    if (
-      transaction.related_transaction &&
-      Array.isArray(transaction.related_transaction) &&
-      transaction.related_transaction.length > 0
-    ) {
-      const relatedTx = transaction.related_transaction[0] as any;
-      result.related_transaction = {
-        ...relatedTx,
-        amount: this.centsToDollars(relatedTx.amount),
-      };
+    if (transaction.related_transaction) {
+      if (Array.isArray(transaction.related_transaction) && transaction.related_transaction.length > 0) {
+        result.related_transaction = transaction.related_transaction[0];
+      } else if (!Array.isArray(transaction.related_transaction)) {
+        result.related_transaction = transaction.related_transaction;
+      }
     }
 
     return result;

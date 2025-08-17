@@ -45,7 +45,16 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: R
         ...classNames,
       }}
       components={{
-        Chevron: ({ orientation, className, ...props }: { orientation?: "left" | "right"; className?: string }) => {
+        Chevron: ({
+          orientation,
+          className,
+          ...props
+        }: {
+          orientation?: "left" | "right" | "up" | "down";
+          className?: string;
+          size?: number;
+          disabled?: boolean;
+        }) => {
           if (orientation === "left") {
             return <ChevronLeft className={cn("size-4", className)} {...props} />;
           }
