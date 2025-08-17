@@ -13,6 +13,12 @@ interface TransactionWithRelated extends TransactionRow {
   related_transaction?: TransactionRow[] | TransactionRow | null;
 }
 
+interface TransactionResponse extends Omit<TransactionRow, "amount"> {
+  amount: number;
+  category?: { id: number; name: string; is_revenue: boolean } | null;
+  related_transaction?: TransactionRow | null;
+}
+
 export interface TransactionFilters {
   accountId?: number;
   dateFrom?: string;
@@ -109,9 +115,17 @@ export class TransactionService {
 
         if (transaction.related_transaction) {
           if (Array.isArray(transaction.related_transaction) && transaction.related_transaction.length > 0) {
-            result.related_transaction = transaction.related_transaction[0];
+            const relatedTx = transaction.related_transaction[0];
+            result.related_transaction = {
+              ...relatedTx,
+              amount: this.centsToDollars(relatedTx.amount),
+            };
           } else if (!Array.isArray(transaction.related_transaction)) {
-            result.related_transaction = transaction.related_transaction;
+            const relatedTx = transaction.related_transaction as TransactionRow;
+            result.related_transaction = {
+              ...relatedTx,
+              amount: this.centsToDollars(relatedTx.amount),
+            };
           }
         }
 
@@ -140,16 +154,25 @@ export class TransactionService {
 
     if (!transaction) return null;
 
-    const result = {
+    const result: TransactionResponse = {
       ...transaction,
       amount: this.centsToDollars(transaction.amount),
+      related_transaction: null,
     };
 
     if (transaction.related_transaction) {
       if (Array.isArray(transaction.related_transaction) && transaction.related_transaction.length > 0) {
-        result.related_transaction = transaction.related_transaction[0];
+        const relatedTx = transaction.related_transaction[0];
+        result.related_transaction = {
+          ...relatedTx,
+          amount: this.centsToDollars(relatedTx.amount),
+        };
       } else if (!Array.isArray(transaction.related_transaction)) {
-        result.related_transaction = transaction.related_transaction;
+        const relatedTx = transaction.related_transaction as TransactionRow;
+        result.related_transaction = {
+          ...relatedTx,
+          amount: this.centsToDollars(relatedTx.amount),
+        };
       }
     }
 

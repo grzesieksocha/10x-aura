@@ -9,6 +9,7 @@ const mockSupabase = {
 
 const mockTransactionService = {
   createTransfer: vi.fn(),
+  createTransaction: vi.fn(),
 } as unknown as TransactionService;
 
 describe("AccountService", () => {
@@ -71,20 +72,17 @@ describe("AccountService", () => {
       };
 
       vi.mocked(mockSupabase.from).mockReturnValue(mockQuery);
-      vi.mocked(mockTransactionService.createTransfer).mockResolvedValue({
-        source_transaction: {
-          id: 1,
-          amount: 1000,
-          account_id: 123,
-          category_id: null,
-          created_at: new Date().toISOString(),
-          description: "Initial balance",
-          related_transaction_id: null,
-          transaction_date: "2024-01-01",
-          transaction_type: "revenue",
-          user_id: "user-123",
-        },
-        destination_transaction: null,
+      vi.mocked(mockTransactionService.createTransaction).mockResolvedValue({
+        id: 1,
+        amount: 1000,
+        account_id: 123,
+        category_id: null,
+        created_at: new Date().toISOString(),
+        description: "Initial balance",
+        related_transaction_id: null,
+        transaction_date: "2024-01-01",
+        transaction_type: "revenue",
+        user_id: "user-123",
       });
 
       const result = await accountService.createAccount("user-123", {
@@ -92,13 +90,13 @@ describe("AccountService", () => {
         initial_balance: 1000,
       });
 
-      expect(mockTransactionService.createTransfer).toHaveBeenCalledWith({
-        user_id: "user-123",
-        source_account_id: 123,
-        destination_account_id: null,
+      expect(mockTransactionService.createTransaction).toHaveBeenCalledWith("user-123", {
+        account_id: 123,
         amount: 1000,
+        transaction_type: "revenue",
         transaction_date: expect.any(String),
         description: "Initial balance",
+        category_id: null,
       });
       expect(result).toEqual({
         ...mockAccount,

@@ -60,12 +60,13 @@ export class AccountService {
 
     return accounts.map((account) => {
       const transactions = account.transactions || [];
-      const balance = transactions.reduce((sum, tx) => {
+      const transactionBalance = transactions.reduce((sum, tx) => {
         if (tx.transaction_type === "expense") {
           return sum - tx.amount / 100;
         }
         return sum + tx.amount / 100;
       }, 0);
+      const balance = account.initial_balance + transactionBalance;
 
       const accountDto: AccountResponseDTO = {
         id: account.id,
@@ -99,12 +100,13 @@ export class AccountService {
     }
 
     const transactions = account.transactions || [];
-    const balance = transactions.reduce((sum, tx) => {
+    const transactionBalance = transactions.reduce((sum, tx) => {
       if (tx.transaction_type === "expense") {
         return sum - tx.amount / 100;
       }
       return sum + tx.amount / 100;
     }, 0);
+    const balance = account.initial_balance + transactionBalance;
 
     return {
       id: account.id,
@@ -140,12 +142,13 @@ export class AccountService {
     }
 
     const transactions = account.transactions || [];
-    const balance = transactions.reduce((sum, tx) => {
+    const transactionBalance = transactions.reduce((sum, tx) => {
       if (tx.transaction_type === "expense") {
         return sum - tx.amount / 100;
       }
       return sum + tx.amount / 100;
     }, 0);
+    const balance = account.initial_balance + transactionBalance;
 
     return {
       id: account.id,
