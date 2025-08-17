@@ -80,7 +80,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       // Also clear client-side session
       await supabaseClient.auth.signOut();
-    } catch (error) {
+    } catch {
       setError("Network error");
     }
 

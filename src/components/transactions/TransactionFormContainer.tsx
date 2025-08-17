@@ -22,46 +22,41 @@ export function TransactionFormContainer({ account, onTransactionAdded, children
   };
 
   const handleSubmitTransaction = async (data: TransactionFormData) => {
-    try {
-      const endpoint = data.type === "transfer" ? "/api/transactions/transfer" : "/api/transactions";
+    const endpoint = data.type === "transfer" ? "/api/transactions/transfer" : "/api/transactions";
 
-      const payload =
-        data.type === "transfer"
-          ? {
-              source_account_id: account.id,
-              destination_account_id: data.destinationAccountId,
-              amount: data.amount, // Already converted in the service
-              transaction_date: new Date(data.date).toISOString(),
-              description: data.description,
-            }
-          : {
-              account_id: account.id,
-              amount: data.amount, // Already converted in the service
-              category_id: data.categoryId,
-              description: data.description,
-              transaction_date: new Date(data.date).toISOString(),
-              transaction_type: data.type,
-            };
+    const payload =
+      data.type === "transfer"
+        ? {
+            source_account_id: account.id,
+            destination_account_id: data.destinationAccountId,
+            amount: data.amount, // Already converted in the service
+            transaction_date: new Date(data.date).toISOString(),
+            description: data.description,
+          }
+        : {
+            account_id: account.id,
+            amount: data.amount, // Already converted in the service
+            category_id: data.categoryId,
+            description: data.description,
+            transaction_date: new Date(data.date).toISOString(),
+            transaction_type: data.type,
+          };
 
-      const response = await fetch(endpoint, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
 
-      if (!response.ok) {
-        throw new Error("Failed to create transaction");
-      }
+    if (!response.ok) {
+      throw new Error("Failed to create transaction");
+    }
 
-      // Refresh transactions and account balance
-      if (onTransactionAdded) {
-        onTransactionAdded();
-      }
-    } catch (error) {
-      console.error("Error creating transaction:", error);
-      throw error;
+    // Refresh transactions and account balance
+    if (onTransactionAdded) {
+      onTransactionAdded();
     }
   };
 

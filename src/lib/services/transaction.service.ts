@@ -5,6 +5,7 @@ import { ApiError } from "../api/errors";
 
 type TransactionInsert = Database["public"]["Tables"]["transactions"]["Insert"];
 type TransactionUpdate = Database["public"]["Tables"]["transactions"]["Update"];
+type TransactionRow = Database["public"]["Tables"]["transactions"]["Row"];
 type TransactionType = Database["public"]["Enums"]["transaction_type_enum"];
 
 export interface TransactionFilters {
@@ -95,7 +96,7 @@ export class TransactionService {
     }
 
     return (
-      transactions?.map((transaction: any) => {
+      transactions?.map((transaction: TransactionRow & { related_transaction?: TransactionRow }) => {
         const result = {
           ...transaction,
           amount: this.centsToDollars(transaction.amount),
@@ -133,7 +134,7 @@ export class TransactionService {
 
     if (!transaction) return null;
 
-    const result: any = {
+    const result: TransactionRow & { related_transaction?: TransactionRow } & { amount: number } = {
       ...transaction,
       amount: this.centsToDollars(transaction.amount),
     };
@@ -229,7 +230,7 @@ export class TransactionService {
     const { error } = await this.supabase.from("transactions").delete().eq("id", transactionId);
 
     if (error) {
-      console.error(`Failed to delete transaction ${transactionId}: ${error.message}`);
+      // Transaction deletion failed during cleanup
     }
   }
 

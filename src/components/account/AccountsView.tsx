@@ -34,8 +34,7 @@ export default function AccountsView() {
       }
       const data = await response.json();
       setAccounts(data);
-    } catch (error: unknown) {
-      console.error("Error fetching accounts:", error);
+    } catch {
       toast.error("Failed to load accounts");
     } finally {
       setIsLoading(false);
@@ -86,8 +85,7 @@ export default function AccountsView() {
 
       setAccounts((prev) => prev.filter((acc) => acc.id !== accountId));
       toast.success("Account deleted successfully");
-    } catch (error) {
-      console.error("Failed to delete account:", error);
+    } catch {
       toast.error("Failed to delete account");
     } finally {
       setIsDeletingAccount(null);
@@ -131,8 +129,7 @@ export default function AccountsView() {
         toast.success("Account created successfully");
       }
       handleCloseDialog();
-    } catch (error: unknown) {
-      console.error("Failed to save account:", error);
+    } catch {
       toast.error(`Failed to ${dialogMode === "edit" ? "update" : "create"} account`);
     }
   };

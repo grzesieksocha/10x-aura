@@ -12,7 +12,7 @@ interface WorkerFixtures {
 export const test = base.extend<TestFixtures, WorkerFixtures>({
   // Worker-scoped fixture: cleanup after all tests in the worker
   databaseCleanup: [
-    async ({}, use) => {
+    async (_, use) => {
       // Setup: Could initialize test data here if needed
 
       await use();
@@ -29,7 +29,7 @@ export const test = base.extend<TestFixtures, WorkerFixtures>({
 
   // Test-scoped fixture: cleanup before each test
   cleanDatabase: [
-    async ({}, use) => {
+    async (_, use) => {
       // Setup: Clean database before each test
       const testUserId = process.env.E2E_USERNAME_ID;
       if (testUserId) {

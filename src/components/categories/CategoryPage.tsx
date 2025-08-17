@@ -50,7 +50,9 @@ export default function CategoryPage() {
     if (window.confirm(`Are you sure you want to delete category "${category.name}"?`)) {
       try {
         await deleteCategory(category.id);
-      } catch {}
+      } catch {
+        // Error is handled by the service layer
+      }
     }
   };
 
@@ -63,7 +65,9 @@ export default function CategoryPage() {
         await createCategory(data);
       }
       setFormModalOpen(false);
-    } catch {}
+    } catch {
+      // Error is handled by the service layer
+    }
   };
 
   // Handle filter changes

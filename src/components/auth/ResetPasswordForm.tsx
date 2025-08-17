@@ -36,7 +36,7 @@ export default function ResetPasswordForm() {
         setSuccess(true);
         toast.success("If this email exists, a reset link has been sent.");
       }
-    } catch (err) {
+    } catch {
       setError("Network error");
       toast.error("Network error");
     }

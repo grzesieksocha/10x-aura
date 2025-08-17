@@ -36,7 +36,7 @@ export default function LoginForm() {
         // Redirect to dashboard
         window.location.href = "/";
       }
-    } catch (err) {
+    } catch {
       setError("Network error");
       toast.error("Network error");
     }
