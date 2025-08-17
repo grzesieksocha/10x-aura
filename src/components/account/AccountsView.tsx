@@ -148,7 +148,9 @@ export default function AccountsView() {
   return (
     <div>
       <div className="mb-6">
-        <Button data-testid="add-account-button" onClick={() => handleOpenDialog("add")}>Add Account</Button>
+        <Button data-testid="add-account-button" onClick={() => handleOpenDialog("add")}>
+          Add Account
+        </Button>
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -196,7 +198,9 @@ export default function AccountsView() {
               <Button type="button" variant="outline" onClick={handleCloseDialog}>
                 Cancel
               </Button>
-              <Button data-testid="submit-account-button" type="submit">{dialogMode === "edit" ? "Update" : "Create"}</Button>
+              <Button data-testid="submit-account-button" type="submit">
+                {dialogMode === "edit" ? "Update" : "Create"}
+              </Button>
             </div>
           </form>
         </DialogContent>

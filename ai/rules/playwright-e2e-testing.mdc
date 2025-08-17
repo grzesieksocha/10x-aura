@@ -23,3 +23,13 @@ alwaysApply: false
 - Use expect assertions with specific matchers
 - Leverage parallel execution for faster test runs
 - Follow 'Arrange', 'Act', 'Assert' approach to test structure for simplicity and readability.
+
+#### DATABASE CLEANUP
+
+- **ALWAYS** import test and expect from `./fixtures` instead of `@playwright/test`
+- Database is automatically cleaned before each test using custom fixtures
+- Test user data (accounts, transactions, categories, budgets) is removed before each test
+- Worker-scoped cleanup runs after all tests complete to ensure clean state
+- Use `createTestAccount()` helper from `./utils/database` for consistent test data setup
+- Never assume data persists between tests - each test starts with clean database
+- Test environment uses separate Supabase instance configured in `.env.test`

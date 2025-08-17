@@ -5,6 +5,7 @@ dotenv.config({ path: ".env.test" });
 
 export default defineConfig({
   testDir: "./tests/e2e",
+  // Note: Tests using custom fixtures from ./fixtures.ts automatically get database cleanup
   timeout: 30 * 1000,
   expect: {
     timeout: 5000,
