@@ -15,7 +15,7 @@ const AccountItem: React.FC<AccountItemProps> = ({ account }) => (
       </CardHeader>
       <CardContent>
         <p className="text-2xl font-bold">
-          {account.current_balance.toLocaleString("pl-PL", { style: "currency", currency: "PLN" })}
+          {account.current_balance.toLocaleString("en-US", { style: "currency", currency: "USD" })}
         </p>
       </CardContent>
     </Card>

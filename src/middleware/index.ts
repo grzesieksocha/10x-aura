@@ -31,16 +31,14 @@ export const onRequest = defineMiddleware(async ({ locals, cookies, url, request
   // Get user session
   const {
     data: { user },
-    error,
   } = await supabase.auth.getUser();
 
-  if (user) {
+  if (user && user.email) {
     // User is authenticated
-    locals.user = user;
+    locals.user = { id: user.id, email: user.email };
     return next();
   } else {
     // User is not authenticated, redirect to login
-    console.log("Auth check failed for", url.pathname, "- Error:", error?.message || "No user");
     return redirect("/login");
   }
 });

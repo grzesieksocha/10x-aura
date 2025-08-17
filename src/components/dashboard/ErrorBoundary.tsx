@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import type { ErrorInfo, ReactNode } from "react";
+import { Component } from "react";
+import type { ReactNode } from "react";
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -17,13 +17,13 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     return { hasError: true };
   }
 
-  componentDidCatch(error: Error, info: ErrorInfo) {
-    console.error("ErrorBoundary caught an error:", error, info);
+  componentDidCatch() {
+    // Error is caught and handled by the boundary
   }
 
   render() {
     if (this.state.hasError) {
-      return this.props.fallback ?? <div>Coś poszło nie tak.</div>;
+      return this.props.fallback ?? <div>Something went wrong.</div>;
     }
     return this.props.children;
   }

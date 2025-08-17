@@ -34,8 +34,7 @@ export default function AccountsView() {
       }
       const data = await response.json();
       setAccounts(data);
-    } catch (error: unknown) {
-      console.error("Error fetching accounts:", error);
+    } catch {
       toast.error("Failed to load accounts");
     } finally {
       setIsLoading(false);
@@ -86,8 +85,7 @@ export default function AccountsView() {
 
       setAccounts((prev) => prev.filter((acc) => acc.id !== accountId));
       toast.success("Account deleted successfully");
-    } catch (error) {
-      console.error("Failed to delete account:", error);
+    } catch {
       toast.error("Failed to delete account");
     } finally {
       setIsDeletingAccount(null);
@@ -131,8 +129,7 @@ export default function AccountsView() {
         toast.success("Account created successfully");
       }
       handleCloseDialog();
-    } catch (error: unknown) {
-      console.error("Failed to save account:", error);
+    } catch {
       toast.error(`Failed to ${dialogMode === "edit" ? "update" : "create"} account`);
     }
   };
@@ -148,7 +145,9 @@ export default function AccountsView() {
   return (
     <div>
       <div className="mb-6">
-        <Button onClick={() => handleOpenDialog("add")}>Add Account</Button>
+        <Button data-testid="add-account-button" onClick={() => handleOpenDialog("add")}>
+          Add Account
+        </Button>
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -164,6 +163,7 @@ export default function AccountsView() {
               <Label htmlFor="name">Account Name</Label>
               <Input
                 id="name"
+                data-testid="account-name-input"
                 value={formData.name}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setFormData({ ...formData, name: e.target.value })
@@ -176,6 +176,7 @@ export default function AccountsView() {
               <Label htmlFor="initial_balance">Initial Balance</Label>
               <Input
                 id="initial_balance"
+                data-testid="account-balance-input"
                 type="number"
                 step="0.01"
                 value={formData.initial_balance}
@@ -194,7 +195,9 @@ export default function AccountsView() {
               <Button type="button" variant="outline" onClick={handleCloseDialog}>
                 Cancel
               </Button>
-              <Button type="submit">{dialogMode === "edit" ? "Update" : "Create"}</Button>
+              <Button data-testid="submit-account-button" type="submit">
+                {dialogMode === "edit" ? "Update" : "Create"}
+              </Button>
             </div>
           </form>
         </DialogContent>

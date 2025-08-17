@@ -101,7 +101,6 @@ export function TransactionForm({
           }
         } catch (err) {
           setError(err instanceof Error ? err.message : "An error occurred");
-          console.error("Error fetching data:", err);
         } finally {
           setLoading(false);
         }
@@ -149,7 +148,6 @@ export function TransactionForm({
       await onSubmit(formData);
       onClose();
     } catch (error) {
-      console.error("Failed to submit transaction:", error);
       setError(error instanceof Error ? error.message : "Failed to submit transaction");
     } finally {
       setIsSubmitting(false);
@@ -200,7 +198,6 @@ export function TransactionForm({
                       date: date ? format(date, "yyyy-MM-dd") : "",
                     })
                   }
-                  initialFocus
                 />
               </PopoverContent>
             </Popover>

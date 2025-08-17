@@ -21,7 +21,7 @@ export const POST: APIRoute = async ({ cookies, request }) => {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
-  } catch (error) {
+  } catch {
     return new Response(JSON.stringify({ error: "Invalid request" }), {
       status: 400,
       headers: { "Content-Type": "application/json" },

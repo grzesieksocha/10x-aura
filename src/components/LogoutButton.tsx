@@ -21,7 +21,7 @@ export default function LogoutButton() {
         // Redirect to login page
         window.location.href = "/login";
       }
-    } catch (error) {
+    } catch {
       toast.error("Network error");
     }
 

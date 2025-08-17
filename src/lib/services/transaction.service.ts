@@ -5,7 +5,19 @@ import { ApiError } from "../api/errors";
 
 type TransactionInsert = Database["public"]["Tables"]["transactions"]["Insert"];
 type TransactionUpdate = Database["public"]["Tables"]["transactions"]["Update"];
+type TransactionRow = Database["public"]["Tables"]["transactions"]["Row"];
 type TransactionType = Database["public"]["Enums"]["transaction_type_enum"];
+
+interface TransactionWithRelated extends TransactionRow {
+  category?: { id: number; name: string; is_revenue: boolean } | null;
+  related_transaction?: TransactionRow[] | TransactionRow | null;
+}
+
+interface TransactionResponse extends Omit<TransactionRow, "amount"> {
+  amount: number;
+  category?: { id: number; name: string; is_revenue: boolean } | null;
+  related_transaction?: TransactionRow | null;
+}
 
 export interface TransactionFilters {
   accountId?: number;
@@ -95,17 +107,26 @@ export class TransactionService {
     }
 
     return (
-      transactions?.map((transaction: any) => {
+      transactions?.map((transaction: TransactionWithRelated) => {
         const result = {
           ...transaction,
           amount: this.centsToDollars(transaction.amount),
         };
 
         if (transaction.related_transaction) {
-          result.related_transaction = {
-            ...transaction.related_transaction,
-            amount: this.centsToDollars(transaction.related_transaction.amount),
-          };
+          if (Array.isArray(transaction.related_transaction) && transaction.related_transaction.length > 0) {
+            const relatedTx = transaction.related_transaction[0];
+            result.related_transaction = {
+              ...relatedTx,
+              amount: this.centsToDollars(relatedTx.amount),
+            };
+          } else if (!Array.isArray(transaction.related_transaction)) {
+            const relatedTx = transaction.related_transaction as TransactionRow;
+            result.related_transaction = {
+              ...relatedTx,
+              amount: this.centsToDollars(relatedTx.amount),
+            };
+          }
         }
 
         return result;
@@ -133,16 +154,26 @@ export class TransactionService {
 
     if (!transaction) return null;
 
-    const result: any = {
+    const result: TransactionResponse = {
       ...transaction,
       amount: this.centsToDollars(transaction.amount),
+      related_transaction: null,
     };
 
     if (transaction.related_transaction) {
-      result.related_transaction = {
-        ...transaction.related_transaction,
-        amount: this.centsToDollars(transaction.related_transaction.amount),
-      };
+      if (Array.isArray(transaction.related_transaction) && transaction.related_transaction.length > 0) {
+        const relatedTx = transaction.related_transaction[0];
+        result.related_transaction = {
+          ...relatedTx,
+          amount: this.centsToDollars(relatedTx.amount),
+        };
+      } else if (!Array.isArray(transaction.related_transaction)) {
+        const relatedTx = transaction.related_transaction as TransactionRow;
+        result.related_transaction = {
+          ...relatedTx,
+          amount: this.centsToDollars(relatedTx.amount),
+        };
+      }
     }
 
     return result;
@@ -229,7 +260,7 @@ export class TransactionService {
     const { error } = await this.supabase.from("transactions").delete().eq("id", transactionId);
 
     if (error) {
-      console.error(`Failed to delete transaction ${transactionId}: ${error.message}`);
+      // Transaction deletion failed during cleanup
     }
   }
 

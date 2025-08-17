@@ -8,11 +8,11 @@ interface TotalBalanceCardProps {
 const TotalBalanceCard: React.FC<TotalBalanceCardProps> = ({ totalBalance }) => (
   <Card>
     <CardHeader>
-      <CardTitle>Łączne saldo</CardTitle>
+      <CardTitle>Total Balance</CardTitle>
     </CardHeader>
     <CardContent>
       <div className="text-2xl font-bold">
-        {totalBalance.toLocaleString("pl-PL", { style: "currency", currency: "PLN" })}
+        {totalBalance.toLocaleString("en-US", { style: "currency", currency: "USD" })}
       </div>
     </CardContent>
   </Card>

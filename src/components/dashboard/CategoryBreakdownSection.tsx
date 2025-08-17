@@ -9,17 +9,17 @@ interface CategoryBreakdownSectionProps {
 const CategoryBreakdownSection: React.FC<CategoryBreakdownSectionProps> = ({ data }) => (
   <section>
     <div className="mb-2">
-      <h2 className="text-xl font-semibold">Podział wydatków</h2>
+      <h2 className="text-xl font-semibold">Expense Breakdown</h2>
     </div>
     {data.length === 0 ? (
-      <div>Brak danych o wydatkach dla wybranego miesiąca</div>
+      <div>No expense data for the selected month</div>
     ) : (
       <div className="max-w-md mx-auto">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Kategoria</TableHead>
-              <TableHead className="text-right">Kwota</TableHead>
+              <TableHead>Category</TableHead>
+              <TableHead className="text-right">Amount</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -27,7 +27,7 @@ const CategoryBreakdownSection: React.FC<CategoryBreakdownSectionProps> = ({ dat
               <TableRow key={item.category}>
                 <TableCell>{item.category}</TableCell>
                 <TableCell className="text-right font-medium">
-                  {item.total.toLocaleString("pl-PL", { style: "currency", currency: "PLN" })}
+                  {item.total.toLocaleString("en-US", { style: "currency", currency: "USD" })}
                 </TableCell>
               </TableRow>
             ))}

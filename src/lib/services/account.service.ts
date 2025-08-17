@@ -25,13 +25,14 @@ export class AccountService {
 
     // Create initial credit transaction if initial balance is greater than 0
     if (command.initial_balance > 0) {
-      await this.transactionService.createTransfer({
-        user_id: userId,
-        source_account_id: account.id,
-        destination_account_id: null,
-        amount: command.initial_balance,
+      // Note: createTransaction expects dollars and converts internally to cents
+      await this.transactionService.createTransaction(userId, {
+        account_id: account.id,
+        amount: command.initial_balance, // Pass as dollars, createTransaction will convert to cents
+        transaction_type: "revenue",
         transaction_date: new Date().toISOString(),
         description: "Initial balance",
+        category_id: null,
       });
     }
 
@@ -59,12 +60,13 @@ export class AccountService {
 
     return accounts.map((account) => {
       const transactions = account.transactions || [];
-      const balance = transactions.reduce((sum, tx) => {
+      const transactionBalance = transactions.reduce((sum, tx) => {
         if (tx.transaction_type === "expense") {
           return sum - tx.amount / 100;
         }
         return sum + tx.amount / 100;
-      }, account.initial_balance);
+      }, 0);
+      const balance = account.initial_balance + transactionBalance;
 
       const accountDto: AccountResponseDTO = {
         id: account.id,
@@ -98,12 +100,13 @@ export class AccountService {
     }
 
     const transactions = account.transactions || [];
-    const balance = transactions.reduce((sum, tx) => {
+    const transactionBalance = transactions.reduce((sum, tx) => {
       if (tx.transaction_type === "expense") {
         return sum - tx.amount / 100;
       }
       return sum + tx.amount / 100;
-    }, account.initial_balance);
+    }, 0);
+    const balance = account.initial_balance + transactionBalance;
 
     return {
       id: account.id,
@@ -139,12 +142,13 @@ export class AccountService {
     }
 
     const transactions = account.transactions || [];
-    const balance = transactions.reduce((sum, tx) => {
+    const transactionBalance = transactions.reduce((sum, tx) => {
       if (tx.transaction_type === "expense") {
         return sum - tx.amount / 100;
       }
       return sum + tx.amount / 100;
-    }, account.initial_balance);
+    }, 0);
+    const balance = account.initial_balance + transactionBalance;
 
     return {
       id: account.id,
